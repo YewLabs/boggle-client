@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Boggle Battle",
   "scripts": {
-    "start": "npx babel --watch src --out-dir . --presets react-app/prod"
+    "start": "webpack serve --mode development",
+    "watch": "npx webpack --mode production --watch",
+    "build": "npx webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -15,8 +17,14 @@
     "url": "https://github.com/mystery-hunt-2021/boggle-client/issues"
   },
   "homepage": "https://github.com/mystery-hunt-2021/boggle-client#readme",
-  "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^3.1.2"
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
   }
 }
