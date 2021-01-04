@@ -4,7 +4,11 @@ export default class Level extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      score: 0,
+      time: 0,
+      totalWords: 25,
       value: "",
+      words: [],
     };
   }
 
@@ -18,9 +22,9 @@ export default class Level extends React.Component {
 
   submit = (e) => {
     e.preventDefault();
-    console.log(this.state.value);
     this.setState(
       produce((state) => {
+        state.words.push(this.state.value);
         state.value = "";
       })
     );
@@ -33,21 +37,27 @@ export default class Level extends React.Component {
           <button className="gray" onClick={this.props.navigate("mainmenu")}>
             Quit
           </button>
-          <span className="score">Score: 0</span>
-          <span className="time">Time: 25</span>
+          <span className="time">Time: {this.state.time}</span>
+          <span className="score">
+            Words: {this.state.words.length} of {this.state.totalWords}
+          </span>
         </div>
         <div className="grid">
           <img src="./static/level4.png" />
         </div>
-        <div>
-          <div className="words"></div>
+        <div className="inputs">
+          <div className="words">
+            {this.state.words.map((w) => (
+              <span>{w}</span>
+            ))}
+          </div>
           <form onSubmit={this.submit}>
             <input
               onChange={this.handleChange}
               type="text"
               value={this.state.value}
             />
-            <button type="submit">send</button>
+            <button type="submit">Send</button>
           </form>
         </div>
       </div>

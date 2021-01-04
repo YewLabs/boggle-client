@@ -16,13 +16,13 @@ if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
 }
 
-function copyIfExists(state, msg, prop) {
+const copyIfExists = (state, msg, prop) => {
   if (prop in msg) {
     state[prop] = msg[prop];
   }
 }
 
-function mergeWords(state, msg) {
+const mergeWords = (state, msg) => {
   if ('words' in msg) {
     for (const word of msg['words']) {
       if (!state.words.includes(word)) {
@@ -32,7 +32,7 @@ function mergeWords(state, msg) {
   }
 }
 
-function mergeTrophies(state, msg) {
+const mergeTrophies = (state, msg) => {
   // TODO
 }
 
@@ -62,7 +62,7 @@ class Main extends React.Component {
   componentDidMount() {
     this.initWs();
   }
-  initWs() {
+  initWs = () => {
     if (OFFLINE_MODE) {
       return;
     }
@@ -93,45 +93,45 @@ class Main extends React.Component {
       this.initWs();
     };
   }
-  wsSend(msg) {
+  wsSend = (msg) => {
     const data = JSON.stringify(msg);
     console.log("sending " + data);
     this.ws.send(data);
   }
-  handleWsOpen() {}
-  handleWsClose() {
+  handleWsOpen = () => {}
+  handleWsClose = () => {
     this.numGames = 0;
     this.setState(produce(this.state, state => {
       state.connected = false;
     }));
   }
-  handleWsMessage(msg) {
+  handleWsMessage = (msg) => {
     const msg_type = msg['type'];
     const handlers = {
       'full': this.handleFullUpdate.bind(this),
     };
     handlers[msg_type](msg);
   }
-  requestStart(level) {
+  requestStart = (level) => {
     this.wsSend({
       "type": "start",
       "level": level,
     });
   }
-  requestStop() {
+  requestStop = () => {
     this.wsSend({
       "type": "stop",
       "numGames": this.numGames,
     });
   }
-  requestWord(word) {
+  requestWord = (word) => {
     this.wsSend({
       "type": "word",
       "numGames": this.numGames,
       "word": word,
     });
   }
-  checkNumGames(msg) {
+  checkNumGames = (msg) => {
     const numGamesServer = msg['numGames'];
     if (numGamesServer < this.numGames) {
       console.log('numGames check failed');
@@ -140,7 +140,7 @@ class Main extends React.Component {
     this.numGames = numGamesServer;
     return true;
   }
-  updateTimeLeft(msg) {
+  updateTimeLeft = (msg) => {
     if (!('timeLeft' in msg)) {
       return;
     }
@@ -149,7 +149,7 @@ class Main extends React.Component {
     }
     this.stopTimer = setTimeout(this.requestStop.bind(this), msg['timeLeft']);
   }
-  handleFullUpdate(msg) {
+  handleFullUpdate = (msg) => {
     if (!this.checkNumGames(msg)) {
       return;
     }
@@ -164,7 +164,7 @@ class Main extends React.Component {
     }));
     this.updateTimeLeft(msg);
   }
-  navigate(target) {
+  navigate = (target) => {
     this.setState(produce(state => {
       state.navigation = target;
     }));
