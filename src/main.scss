@@ -99,3 +99,19 @@
     }
   }
 }
+
+.end {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  p {
+    margin: 0 0 1rem;
+  }
+
+  .level {
+    font-size: 1.25em;
+    font-weight: bold;
+  }
+}

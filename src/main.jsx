@@ -1,5 +1,6 @@
 import produce from "immer";
 
+import End from "./end.jsx";
 import Level from "./level.jsx";
 import Menu from "./menu.jsx";
 import { sampleBoard } from "./data";
@@ -118,11 +119,11 @@ class Main extends React.Component {
           state.connected = true;
           state.maxLevel = 3;
           state.running = false;
-          state.timeLeft = 300 * 1000;
-          state.totTime = 300 * 1000;
+          state.timeLeft = 2 * 1000;
+          state.totTime = 2 * 1000;
         })
       );
-      this.updateTimeLeft({ timeLeft: 300 * 1000 });
+      this.updateTimeLeft({ timeLeft: 2 * 1000 });
       return;
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
@@ -188,6 +189,13 @@ class Main extends React.Component {
     });
   };
   requestStop = () => {
+    if (OFFLINE_MODE) {
+      this.setState(produce(state => {
+        state.navigation = "end";
+        state.running = false;
+      }));
+      return;
+    }
     this.wsSend({
       type: "stop",
       numGames: this.numGames,
@@ -231,6 +239,9 @@ class Main extends React.Component {
       return;
     }
     this.setState(produce(state => {
+      if (state.running && !msg.running) {
+        state.navigation = "end";
+      }
       state.connected = true;
       copyIfExists(state, msg, "maxLevel");
       copyIfExists(state, msg, "running");
@@ -244,9 +255,7 @@ class Main extends React.Component {
       mergeWords(state, msg);
       mergeTrophies(state, msg);
 
-      if (state.running) {
-        state.navigation = "mainmenu";
-      } else {
+      if (!state.running) {
         state.score = null;
         state.words = null;
       }
@@ -354,7 +363,14 @@ class Main extends React.Component {
       case "leaderboard":
         return <div navigate={navigate} />;
       case "end":
-        return <div navigate={navigate} />;
+        return <End
+          level={this.state.level}
+          navigate={navigate}
+          roundtrophies={this.state.roundTrophies}
+          totwords={this.state.totNumWords}
+          score={this.state.score}
+          words={this.state.words?.length}
+        />;
       default:
         return <div>Loading...</div>;
     }
