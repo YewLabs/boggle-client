@@ -26,10 +26,12 @@
       background-color: $secondary-color;
     }
     &.selected {
-      background-color: desaturate(darken($theme-color, 10%), 10%);
+      // background-color: desaturate(darken($theme-color, 10%), 10%);
+      background-color: #558b2f;
     }
     &.last {
-      background-color: adjust-hue(saturate($theme-color, 10%), -40deg);
+      // background-color: adjust-hue(saturate($theme-color, 10%), -40deg);
+      background-color: #afb42b;
     }
     &.wrong {
       animation: wrong 0.5s;

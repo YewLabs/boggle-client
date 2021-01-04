@@ -98,6 +98,7 @@
   .description,
   .blanks {
     @include flex-ccc;
+    justify-content: flex-end;
   }
 
   .trophies {
@@ -125,7 +126,7 @@
   .trophies {
     align-items: start;
     height: 90%;
-    
+
     .entry {
       display: flex;
       margin: 0.5em 0;
@@ -171,6 +172,7 @@
   }
 }
 
-.statistics .leaderboard, .description {
+.statistics,
+.leaderboard {
   @include flex-ccc;
 }
