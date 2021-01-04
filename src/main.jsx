@@ -1,3 +1,5 @@
+import produce from "immer";
+
 import Level from "./level.jsx";
 import Menu from "./menu.jsx";
 
@@ -18,8 +20,13 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.ws = null;
+
+    // counter used for synchronization, see server code
+    this.numGames = 0;
+
     this.state = {
       navigation: "mainmenu",
+      timeLeft: null,
     };
   }
   componentDidMount() {
@@ -43,8 +50,8 @@ class Main extends React.Component {
 
       // TESTING
       this.wsSend({
-        type: "start",
-        round: 1,
+        "type": "start",
+        "level": 1,
       });
 
       this.handleWsOpen();
@@ -71,9 +78,9 @@ class Main extends React.Component {
   }
   handleWsMessage(msg) {}
   navigate(target) {
-    this.setState({
-      navigation: target,
-    });
+    this.setState(produce(this.state, state => {
+      state.navigation = target;
+    }));
   }
   render() {
     const navigate = (s) => (e) => this.navigate(s);
