@@ -20,7 +20,7 @@ export default class Level extends React.Component {
   }
 
   focusInput = () => {
-    this.submitBox.focus();
+    this.submitBox.focus({preventScroll: true});
   };
 
   handleChange = (e) => {
