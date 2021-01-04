@@ -2,6 +2,8 @@ import produce from "immer";
 
 import Grid from "./grid.jsx";
 
+import "./level.scss";
+
 export default class Level extends React.Component {
   constructor(props) {
     super(props);

@@ -1,4 +1,4 @@
-export default [
+export const data = [
   [
     { x: 1, y: 1, cx: 96.0, cy: 96.0 },
     { x: 1, y: 2, cx: 96.0, cy: 160.0 },
@@ -94,3 +94,7 @@ export default [
     { x: 2, y: 2, z: 2, cx: 320.0, cy: 544.0 },
   ],
 ];
+
+export const adjacent = [
+    (x1, y1, x2, y2) => abs(x1 - x2) <= 1 && abs(y1 - y2) <= 1
+]

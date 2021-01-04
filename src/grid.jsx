@@ -1,5 +1,8 @@
 import produce from "immer";
-import data from "./data";
+
+import { data } from "./data";
+
+import "./grid.scss";
 
 export default class Grid extends React.Component {
   constructor(props) {
