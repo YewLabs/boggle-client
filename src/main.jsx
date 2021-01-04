@@ -10,7 +10,8 @@ import { sampleBoard } from "./data";
 
 import "./main.scss";
 
-const OFFLINE_MODE = window.location.host == "localhost:8080";
+// const OFFLINE_MODE = window.location.host == "localhost:8080";
+const OFFLINE_MODE = false;
 const urlParams = new URLSearchParams(window.location.search);
 // TODO: make sure these are eventually false
 const FAKE_SERVER_MODE = new URLSearchParams(window.location.search).has(
@@ -111,6 +112,7 @@ class Main extends React.Component {
       words: null,
       trophies: null,
       grid: null,
+      wordResponses: [],
       hiscores: null,
     };
 
@@ -288,19 +290,50 @@ class Main extends React.Component {
       this.debugStage++;
     }
   };
-  handleWrong = () => {
+  handleWrong = (word) => {
+    // only for ui response
+    const fulfilled = () =>
+      this.setState(
+        produce((state) => {
+          state.wordResponses = state.wordResponses.filter(
+            (x) => x.word !== word
+          );
+        })
+      );
+    this.setState(
+      produce((state) => {
+        state.wordResponses.push({
+          word,
+          fulfilled,
+          response: "wrong",
+        });
+      })
+    );
+  };
+  handleDuplicate = (word) => {
     // only for ui response
   };
-  handleDuplicate = () => {
-    // only for ui response
-  };
-  handleCorrect = () => {
+  handleCorrect = (word) => {
     // only for ui response, do not touch word list
   };
   handleGrade = (msg) => {
-    [this.handleWrong, this.handleDuplicate, this.handleCorrect][
-      msg["grade"]
-    ]();
+    const response = ["wrong", "duplicate", "correct"][msg["grade"]];
+    const word = msg["word"];
+    const fulfilled = () =>
+      this.setState(
+        produce((state) => {
+          state.wordResponses = state.wordResponses.filter((x) => x.word !== word);
+        })
+      );
+    this.setState(
+      produce((state) => {
+        state.wordResponses.push({
+          word,
+          fulfilled,
+          response,
+        });
+      })
+    );
   };
   handleHiscores = (hiscores) => {
     this.setState(produce(state => {
@@ -362,6 +395,7 @@ class Main extends React.Component {
           totwords={this.state.totNumWords}
           score={this.state.score}
           words={this.state.words}
+          wordresponses={this.state.wordResponses}
           onword={this.handleWord}
           onquit={this.handleQuit}
         />

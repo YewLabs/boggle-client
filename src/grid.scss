@@ -14,6 +14,7 @@
     @include flex-ccc;
     background-color: darken($secondary-color, 20%);
     border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
     color: #fff;
     cursor: pointer;
     height: 2em;
@@ -21,11 +22,23 @@
     user-select: none;
     width: 2em;
 
+    &:hover {
+      background-color: $secondary-color;
+    }
     &.selected {
       background-color: desaturate(darken($theme-color, 10%), 10%);
     }
     &.last {
       background-color: adjust-hue(saturate($theme-color, 10%), -40deg);
+    }
+    &.wrong {
+      animation: wrong 0.5s;
+    }
+    &.duplicate {
+      animation: duplicate 0.5s;
+    }
+    &.correct {
+      animation: correct 0.5s;
     }
   }
 }

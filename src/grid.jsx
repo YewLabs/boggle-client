@@ -12,6 +12,8 @@ export default class Grid extends React.Component {
       selected: [],
       last: {},
     };
+    this.lettersOf = {};
+    this.globalFulfilled = false;
   }
 
   componentDidMount() {
@@ -23,7 +25,7 @@ export default class Grid extends React.Component {
   handleMouseUp = (e) => {
     this.mouseUp();
     this.props.refocus();
-  }
+  };
 
   mouseDown = (i, pt) => {
     if (this.state.dragging) return;
@@ -60,7 +62,10 @@ export default class Grid extends React.Component {
           : this.props.grid[x][y][z];
       })
       .join("");
-    if (word !== "") this.props.submit(word);
+    if (word !== "") {
+      this.props.submit(word);
+      this.lettersOf[word] = this.state.selected;
+    }
     this.setState(
       produce((state) => {
         state.dragging = false;
@@ -70,15 +75,42 @@ export default class Grid extends React.Component {
   };
 
   render() {
+    let responses = {};
+    let callbacks = {};
+    let globalResponse = "";
+    let globalCallback = () => {};
+    this.props.wordresponses?.forEach(({ word, response, fulfilled }) => {
+      if (word in this.lettersOf) {
+        this.lettersOf[word].forEach((i) => {
+          responses[i] = response;
+          callbacks[i] = () => {
+            delete this.lettersOf[word];
+            fulfilled();
+          };
+        });
+      } else {
+        globalResponse = response;
+        this.globalFulfilled = false;
+        globalCallback = () => {
+          if (this.globalFulfilled) return;
+          fulfilled();
+          this.globalFulfilled = true;
+        };
+      }
+    });
+
     const circs = data[this.props.level - 1].map(({ x, y, z, cx, cy }, i) => (
       <div
         className={`letter
           ${this.state.selected.includes(i) ? "selected" : ""}
           ${this.state.selected.slice(-1)[0] === i ? "last" : ""}
+          ${globalResponse}
+          ${responses[i] ?? ""}
         `}
         key={i}
         onMouseDown={(e) => this.mouseDown(i, { x, y, z })}
         onMouseMove={(e) => this.mouseMove(i, { x, y, z })}
+        onAnimationEnd={(e) => callbacks?.[i]?.() || globalCallback()}
         style={{ left: cx, top: cy }}
       >
         {z === undefined ? this.props.grid[x][y] : this.props.grid[x][y][z]}
@@ -87,7 +119,7 @@ export default class Grid extends React.Component {
 
     return (
       <div className={`grid level${this.props.level}`}>
-        <img src={`./static/level${this.props.level}.svg`} />
+        <img src={`./static/level${this.props.level}.svg`} draggable="false" />
         <div className="letters">{circs}</div>
       </div>
     );

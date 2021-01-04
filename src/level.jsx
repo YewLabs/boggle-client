@@ -64,14 +64,16 @@ export default class Level extends React.Component {
             </div>
           </div>
           <span className="score">
-            Words: {this.props.words.length} of {this.props.totwords}, Score:{" "}
-            {this.props.score}
+            Words: {this.props.words.length} of {this.props.totwords}
+            <br />
+            Score: {this.props.score}
           </span>
         </div>
         <Grid
           grid={this.props.grid}
           level={this.props.level.slice(-1)}
           submit={this.props.onword}
+          wordresponses={this.props.wordresponses}
           refocus={this.focusInput}
         />
         <div className="inputs">
