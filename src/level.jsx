@@ -50,7 +50,7 @@ export default class Level extends React.Component {
           <button className="gray" onClick={this.props.onquit}>
             Quit
           </button>
-          <span className="time">Time: {this.state.time}</span>
+          <span className="time">Time: {this.props.timeleft}</span>
           <span className="score">
             Words: {this.props.words.length} of {this.props.totwords}, Score: {this.props.score}
           </span>

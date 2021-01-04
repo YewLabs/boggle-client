@@ -21,6 +21,8 @@ const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
   : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
+const TICK_INTERVAL = 1000 / 30; // in ms
+
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
 }
@@ -80,6 +82,7 @@ class Main extends React.Component {
     super(props);
 
     this.ws = null;
+    this.timerInterval = null;
     this.stopTimer = null;
 
     // counter used for synchronization, see server code
@@ -206,10 +209,18 @@ class Main extends React.Component {
     if (!("timeLeft" in msg)) {
       return;
     }
-    if (this.stopTimer != null) {
+    if (this.stopTimer !== null) {
       clearTimeout(this.stopTimer);
     }
+    if (this.timerInterval !== null) {
+      clearInterval(this.timerInterval);
+    }
     this.stopTimer = setTimeout(this.requestStop, msg["timeLeft"]);
+    this.timerInterval = setInterval(() => {
+      this.setState(produce(state => {
+        state.timeLeft -= TICK_INTERVAL;
+      }))
+    }, TICK_INTERVAL);
   };
   handleFullUpdate = (msg) => {
     if (!this.checkNumGames(msg)) {
@@ -318,6 +329,7 @@ class Main extends React.Component {
         <Level
           grid={this.state.grid}
           level={`level${this.state.level + 1}`}
+          timeleft={this.state.timeLeft}
           totwords={this.state.totNumWords}
           score={this.state.score}
           words={this.state.words}
