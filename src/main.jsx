@@ -97,6 +97,7 @@ class Main extends React.Component {
       totNumWords: null,
       level: null,
       timeLeft: null,
+      totTime: null,
       grid: [],
       words: null,
       trophies: null,
@@ -232,6 +233,7 @@ class Main extends React.Component {
       copyIfExists(state, msg, "running");
       copyIfExists(state, msg, "level");
       copyIfExists(state, msg, "timeLeft");
+      copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
       copyIfExists(state, msg, "roundTrophies");
       copyIfExists(state, msg, "grid");
@@ -239,14 +241,13 @@ class Main extends React.Component {
       mergeWords(state, msg);
       mergeTrophies(state, msg);
 
-        if (state.running) {
-          state.navigation = "mainmenu";
-        } else {
-          state.score = null;
-          state.words = null;
-        }
-      })
-    );
+      if (state.running) {
+        state.navigation = "mainmenu";
+      } else {
+        state.score = null;
+        state.words = null;
+      }
+    }));
     this.updateTimeLeft(msg);
 
     if (SERVER_TEST && this.debugStage == 0) {
