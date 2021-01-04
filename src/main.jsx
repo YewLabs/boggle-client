@@ -44,11 +44,12 @@ const mergeWords = (state, msg) => {
   if ("words" in msg) {
     if (state.words == null) {
       state.words = msg["words"];
-      return;
     }
-    for (const w of msg["words"]) {
-      if (!state.words.some((ow) => w[0] == ow[0])) {
-        state.words.push(w);
+    else {
+      for (const w of msg["words"]) {
+        if (!state.words.some((ow) => w[0] == ow[0])) {
+          state.words.push(w);
+        }
       }
     }
     state.words.sort();
@@ -265,6 +266,7 @@ class Main extends React.Component {
       if (!state.running && msg.running) {
         state.score = null;
         state.words = null;
+        state.special = null;
         state.roundTrophies = 0;
       }
       state.connected = true;
@@ -275,6 +277,7 @@ class Main extends React.Component {
       copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
       copyIfExists(state, msg, "grid");
+      copyIfExists(state, msg, "special");
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeRoundTrophies(state, msg);
@@ -369,6 +372,7 @@ class Main extends React.Component {
           totwords={this.state.totNumWords}
           score={this.state.score}
           words={this.state.words}
+          special={this.state.special}
           wordresponses={this.state.wordResponses}
           onword={this.handleWord}
           onquit={this.handleQuit}
