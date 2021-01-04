@@ -8,7 +8,6 @@ export default class Level extends React.Component {
     this.state = {
       score: 0,
       time: 0,
-      totalWords: 25,
       value: "",
     };
     this.submitBox = null;
@@ -45,10 +44,10 @@ export default class Level extends React.Component {
           </button>
           <span className="time">Time: {this.state.time}</span>
           <span className="score">
-            Words: {this.props.words.length} of {this.state.totalWords}
+            Words: {this.props.words.length} of {this.props.totwords}, Score: {this.props.score}
           </span>
         </div>
-        <Grid level={this.props.level.slice(-1)} />
+        <Grid level={this.props.level.slice(-1)} grid={this.props.grid} />
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => (

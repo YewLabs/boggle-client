@@ -86,10 +86,13 @@ class Main extends React.Component {
       navigation: "mainmenu",
       running: false,
       maxLevel: 0,
+      roundTrophies: 0,
+      totNumWords: null,
       level: null,
       timeLeft: null,
       words: null,
       trophies: null,
+      grid: null,
     };
 
     // FOR DEBUGGING ONLY
@@ -209,6 +212,9 @@ class Main extends React.Component {
       copyIfExists(state, msg, "running");
       copyIfExists(state, msg, "level");
       copyIfExists(state, msg, "timeLeft");
+      copyIfExists(state, msg, "totNumWords");
+      copyIfExists(state, msg, "roundTrophies");
+      copyIfExists(state, msg, "grid");
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeTrophies(state, msg);
@@ -253,6 +259,11 @@ class Main extends React.Component {
         state.running = true;
         state.level = level;
         state.words = [];
+        state.score = 0;
+        state.totNumWords = 10;
+        state.grid = 'abcdefghijkl';
+        // bitmask indicating which trophies we got
+        state.roundTrophies = 0b1100;
       }));
       return;
     }
@@ -289,7 +300,7 @@ class Main extends React.Component {
         return <div>Connecting...</div>;
     }
     if (this.state.running) {
-        return <Level level={`level${this.state.level + 1}`} score={this.state.score} words={this.state.words} onword={this.handleWord} onquit={this.handleQuit} />;
+        return <Level level={`level${this.state.level + 1}`} grid={this.state.grid} score={this.state.score} totwords={this.state.totNumWords} words={this.state.words} onword={this.handleWord} onquit={this.handleQuit} />;
     }
 
     switch (this.state.navigation) {
