@@ -117,13 +117,23 @@
 .end {
   @include flex-ccc;
 
-  p {
-    margin: 0 0 1rem;
+  .points {
+    text-align: center;
+    width: 100%;
   }
 
-  .level {
-    font-size: 1.25em;
-    font-weight: bold;
+  .trophies {
+    align-items: start;
+    height: 90%;
+    
+    .entry {
+      display: flex;
+      margin: 0.5em 0;
+
+      .description {
+        padding-left: 1em;
+      }
+    }
   }
 }
 
@@ -137,6 +147,7 @@
     position: relative;
 
     img {
+      height: 100px;
       z-index: 1;
     }
 

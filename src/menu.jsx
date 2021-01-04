@@ -61,13 +61,17 @@ export default class Menu extends React.Component {
           Statistics
         </button>
         <div className="description">{this.state.description}</div>
-        <button
-          className="leaderboard"
-          onClick={this.props.navigate("leaderboard")}
-        >
-          Leaderboard
-        </button>
-        <div className="blanks">_ _ _ _ _ _ _ _ _ _   _ _ _ _ _ _</div>
+        {this.props.blanks && (
+          <React.Fragment>
+            <button
+              className="leaderboard"
+              onClick={this.props.navigate("leaderboard")}
+            >
+              Leaderboard
+            </button>
+            <div className="blanks">{this.props.blanks}</div>
+          </React.Fragment>
+        )}
       </div>
     );
   }

@@ -24,7 +24,7 @@ export default class Grid extends React.Component {
   }
   handleMouseUp = (e) => {
     this.mouseUp();
-    this.props.refocus();
+    this.props.refocus?.();
   };
 
   mouseDown = (i, pt) => {
@@ -108,12 +108,14 @@ export default class Grid extends React.Component {
           ${responses[i] ?? ""}
         `}
         key={i}
-        onMouseDown={(e) => this.mouseDown(i, { x, y, z })}
-        onMouseMove={(e) => this.mouseMove(i, { x, y, z })}
+        onMouseDown={(e) => this.props.disabled || this.mouseDown(i, { x, y, z })}
+        onMouseMove={(e) => this.props.disabled || this.mouseMove(i, { x, y, z })}
         onAnimationEnd={(e) => callbacks?.[i]?.() || globalCallback()}
         style={{ left: cx, top: cy }}
       >
-        {z === undefined ? this.props.grid[x][y] : this.props.grid[x][y][z]}
+        {z === undefined
+          ? this.props.grid[x][y].toUpperCase()
+          : this.props.grid[x][y][z].toUpperCase()}
       </div>
     ));
 

@@ -115,6 +115,8 @@ class Main extends React.Component {
       grid: null,
       wordResponses: [],
       hiscores: null,
+      blanks: null,
+      allWords: null,
     };
 
     // FOR DEBUGGING ONLY
@@ -268,6 +270,7 @@ class Main extends React.Component {
         state.words = null;
         state.special = null;
         state.roundTrophies = 0;
+        state.allWords = null;
       }
       state.connected = true;
       copyIfExists(state, msg, "maxLevel");
@@ -278,10 +281,15 @@ class Main extends React.Component {
       copyIfExists(state, msg, "totNumWords");
       copyIfExists(state, msg, "grid");
       copyIfExists(state, msg, "special");
+      copyIfExists(state, msg, "blanks");
+      copyIfExists(state, msg, "allWords");
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeRoundTrophies(state, msg);
       mergeTrophies(state, msg);
+      if (state.allWords !== null) {
+        state.allWords.sort();
+      }
     }));
     this.updateTimeLeft(msg);
 
@@ -400,6 +408,7 @@ class Main extends React.Component {
             maxlevel={this.state.maxLevel}
             onselectlevel={onselectlevel}
             trophies={this.state.trophies}
+            blanks={this.state.blanks}
           />
         );
       case "statistics":
@@ -409,12 +418,15 @@ class Main extends React.Component {
       case "end":
         return (
           <End
+            grid={this.state.grid}
             level={this.state.level}
             navigate={navigate}
             roundtrophies={this.state.roundTrophies}
             totwords={this.state.totNumWords}
             score={this.state.score}
-            words={this.state.words?.length}
+            words={this.state.words}
+            special={this.state.special}
+            allwords={this.state.allWords}
           />
         );
       default:
