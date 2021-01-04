@@ -78,6 +78,9 @@
         width: calc(50% - 1em);
         margin: 0.25em;
       }
+      button:disabled {
+        visibility: hidden;
+      }
     }
   }
 

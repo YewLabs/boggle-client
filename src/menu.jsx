@@ -4,15 +4,16 @@ export default class Menu extends React.Component {
   }
 
   render() {
+    const buttons = [];
+    for (let i = 0; i < 4; i++) {
+      buttons.push(<button key={i} onClick={this.props.onselectlevel(i)} disabled={i > this.props.maxlevel}>Level {i+1}</button>);
+    }
     return (
       <div className="menu">
         <div className="levels">
           <div className="levels-buttons">
           <p>Play:</p>
-            <button onClick={this.props.onselectlevel(0)}>Level 1</button>
-            <button onClick={this.props.onselectlevel(1)}>Level 2</button>
-            <button onClick={this.props.onselectlevel(2)}>Level 3</button>
-            <button onClick={this.props.onselectlevel(3)}>Level 4</button>
+            { buttons }
           </div>
         </div>
         <div className="etc">

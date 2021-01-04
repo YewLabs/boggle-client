@@ -370,7 +370,7 @@ class Main extends React.Component {
 
     switch (this.state.navigation) {
       case "mainmenu":
-        return <Menu navigate={navigate} onselectlevel={onselectlevel} />;
+        return <Menu navigate={navigate} maxlevel={this.state.maxLevel} onselectlevel={onselectlevel} />;
       case "trophies":
         return <Trophies
           navigate={navigate}
