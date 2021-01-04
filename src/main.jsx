@@ -78,7 +78,7 @@ class Main extends React.Component {
   }
   handleWsMessage(msg) {}
   navigate(target) {
-    this.setState(produce(this.state, state => {
+    this.setState(produce(state => {
       state.navigation = target;
     }));
   }

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/mystery-hunt-2021/boggle-client#readme",
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^5.0.1",
     "immer": "^8.0.0",
     "sass": "^1.32.0",
