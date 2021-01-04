@@ -17,7 +17,12 @@
     "url": "https://github.com/mystery-hunt-2021/boggle-client/issues"
   },
   "homepage": "https://github.com/mystery-hunt-2021/boggle-client#readme",
-  "dependencies": {},
+  "dependencies": {
+    "css-loader": "^5.0.1",
+    "sass": "^1.32.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
