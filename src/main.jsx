@@ -47,9 +47,9 @@ const mergeWords = (state, msg) => {
       state.words = msg["words"];
       return;
     }
-    for (const word of msg["words"]) {
-      if (!state.words.includes(word)) {
-        state.words.push(word);
+    for (const w of msg["words"]) {
+      if (!state.words.some((ow) => w[0] == ow[0])) {
+        state.words.push(w);
       }
     }
   }
@@ -371,7 +371,7 @@ class Main extends React.Component {
     if (OFFLINE_MODE) {
       this.setState(
         produce((state) => {
-          state.words.push(word);
+          state.words.push([word, 10]);
         })
       );
       return;

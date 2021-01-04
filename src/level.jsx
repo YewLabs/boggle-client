@@ -79,7 +79,7 @@ export default class Level extends React.Component {
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => (
-              <span key={i}>{w}</span>
+              <span key={i}>{w[0]} {w[1]}</span>
             ))}
           </div>
           <form onSubmit={this.onInput}>
