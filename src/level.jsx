@@ -34,7 +34,7 @@ export default class Level extends React.Component {
     return (
       <div className="level">
         <div className="toolbar">
-          <button className="gray" onClick={this.props.navigate("mainmenu")}>
+          <button className="gray" onClick={this.props.onquit}>
             Quit
           </button>
           <span className="time">Time: {this.state.time}</span>

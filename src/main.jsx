@@ -6,18 +6,24 @@ import Menu from "./menu.jsx";
 import "./main.scss";
 
 const OFFLINE_MODE = window.location.host == "localhost:8080";
-// TODO: make sure this is eventually false
-const FAKE_SERVER_MODE = true;
+      const urlParams = new URLSearchParams(window.location.search);
+// TODO: make sure these are eventually false
+const FAKE_SERVER_MODE =
+  new URLSearchParams(window.location.search).has("fakeserver");
+const SERVER_TEST = false;
 
 const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
 const WEBSOCKETS_ENDPOINT = OFFLINE_MODE ? null : (
   FAKE_SERVER_MODE ?
-  'ws://krawthekrow.me:29782/ws/puzzle/boggle'
+  "ws://krawthekrow.me:29782/ws/puzzle/boggle"
   : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`
 );
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
+}
+if (FAKE_SERVER_MODE) {
+  console.log("WARNING: fake server mode");
 }
 
 const copyIfExists = (state, msg, prop) => {
@@ -27,12 +33,12 @@ const copyIfExists = (state, msg, prop) => {
 }
 
 const mergeWords = (state, msg) => {
-  if ('words' in msg) {
+  if ("words" in msg) {
     if (state.words == null) {
-      state.words = msg['words'];
+      state.words = msg["words"];
       return;
     }
-    for (const word of msg['words']) {
+    for (const word of msg["words"]) {
       if (!state.words.includes(word)) {
         state.words.push(word);
       }
@@ -41,27 +47,27 @@ const mergeWords = (state, msg) => {
 }
 
 const mergeScore = (state, msg) => {
-  if ('score' in msg) {
+  if ("score" in msg) {
     if (state.score == null) {
-      state.score = msg['score'];
+      state.score = msg["score"];
       return;
     }
-    if (msg['score'] > state.score) {
-      state.score = msg['score'];
+    if (msg["score"] > state.score) {
+      state.score = msg["score"];
     }
   }
 }
 
 function mergeTrophies(state, msg) {
-  if ('trophies' in msg) {
+  if ("trophies" in msg) {
     if (state.trophies == null) {
-      state.trophies = msg['trophies'];
+      state.trophies = msg["trophies"];
       return;
     }
     state.trophies = [...state.trophies].map((c, i) => {
-      const trophy = msg['trophies'][i];
-      return (trophy == '?') ? c : trophy;
-    }).join('');
+      const trophy = msg["trophies"][i];
+      return (trophy == "?") ? c : trophy;
+    }).join("");
   }
 }
 
@@ -109,8 +115,10 @@ class Main extends React.Component {
         data: urlParams.get("token"),
       });
 
-      // TESTING
-      this.requestStart(0);
+      this.requestGetUpdate();
+      if (SERVER_TEST) {
+        this.requestStart(0);
+      }
 
       this.handleWsOpen();
     };
@@ -137,7 +145,7 @@ class Main extends React.Component {
     }));
   }
   handleWsMessage = (msg) => {
-    const msg_type = msg['type'];
+    const msg_type = msg["type"];
     const handlers = {
       "full": this.handleFullUpdate.bind(this),
       "grade": this.handleGrade,
@@ -148,6 +156,11 @@ class Main extends React.Component {
     this.wsSend({
       "type": "start",
       "level": level,
+    });
+  }
+  requestGetUpdate = () => {
+    this.wsSend({
+      "type": "getUpdate",
     });
   }
   requestStop = () => {
@@ -164,22 +177,22 @@ class Main extends React.Component {
     });
   }
   checkNumGames = (msg) => {
-    const numGamesServer = msg['numGames'];
+    const numGamesServer = msg["numGames"];
     if (numGamesServer < this.numGames) {
-      console.log('numGames check failed');
+      console.log("numGames check failed");
       return false;
     }
     this.numGames = numGamesServer;
     return true;
   }
   updateTimeLeft = (msg) => {
-    if (!('timeLeft' in msg)) {
+    if (!("timeLeft" in msg)) {
       return;
     }
     if (this.stopTimer != null) {
       clearTimeout(this.stopTimer);
     }
-    this.stopTimer = setTimeout(this.requestStop.bind(this), msg['timeLeft']);
+    this.stopTimer = setTimeout(this.requestStop.bind(this), msg["timeLeft"]);
   }
   handleFullUpdate = (msg) => {
     if (!this.checkNumGames(msg)) {
@@ -187,42 +200,48 @@ class Main extends React.Component {
     }
     this.setState(produce(state => {
       state.connected = true;
-      copyIfExists(state, msg, 'maxLevel');
-      copyIfExists(state, msg, 'running');
-      copyIfExists(state, msg, 'level');
-      copyIfExists(state, msg, 'timeLeft');
+      copyIfExists(state, msg, "maxLevel");
+      copyIfExists(state, msg, "running");
+      copyIfExists(state, msg, "level");
+      copyIfExists(state, msg, "timeLeft");
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeTrophies(state, msg);
+      if (state.running) {
+        state.navigation = "mainmenu";
+      }
     }));
     this.updateTimeLeft(msg);
 
-    if (this.debugStage == 0) {
-      this.requestWord('orange');
-      this.requestWord('yellow');
-      this.requestWord('green');
-      this.requestWord('green');
+    if (SERVER_TEST && this.debugStage == 0) {
+      this.requestWord("orange");
+      this.requestWord("yellow");
+      this.requestWord("green");
+      this.requestWord("green");
       this.debugStage++;
     }
   }
   handleGrade = (msg) => {
   }
   navigate = (target) => {
-    this.setState(produce(state => {
-      state.navigation = target;
-    }));
+    this.requestStart(target);
+  }
+  handleQuit = () => {
+    this.requestStop();
   }
   render() {
     const navigate = (s) => (e) => this.navigate(s);
 
+    if (!this.state.connected) {
+        return <div>Connecting...</div>;
+    }
+    if (this.state.running) {
+        return <Level level={`level${this.state.level + 1}`} score={this.state.score} onquit={this.handleQuit} />;
+    }
+
     switch (this.state.navigation) {
       case "mainmenu":
         return <Menu navigate={navigate} />;
-      case "level1":
-      case "level2":
-      case "level3":
-      case "level4":
-        return <Level navigate={navigate} level={this.state.navigation} />;
       case "trophies":
         return <div navigate={navigate} />;
       case "statistics":

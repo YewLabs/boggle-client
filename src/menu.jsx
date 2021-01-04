@@ -9,10 +9,10 @@ export default class Menu extends React.Component {
         <div className="levels">
           <div className="levels-buttons">
           <p>Play:</p>
-            <button onClick={this.props.navigate("level1")}>Level 1</button>
-            <button onClick={this.props.navigate("level2")}>Level 2</button>
-            <button onClick={this.props.navigate("level3")}>Level 3</button>
-            <button onClick={this.props.navigate("level4")}>Level 4</button>
+            <button onClick={this.props.navigate(0)}>Level 1</button>
+            <button onClick={this.props.navigate(1)}>Level 2</button>
+            <button onClick={this.props.navigate(2)}>Level 3</button>
+            <button onClick={this.props.navigate(3)}>Level 4</button>
           </div>
         </div>
         <div className="etc">
