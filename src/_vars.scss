@@ -12,28 +12,28 @@ $correct-color: #4caf50;
 }
 
 @keyframes wrong {
-  30% {
+  5% {
     background-color: $wrong-color;
   }
-  60% {
+  15% {
     background-color: $wrong-color;
   }
 }
 
 @keyframes duplicate {
-  30% {
+  5% {
     background-color: $duplicate-color;
   }
-  60% {
+  15% {
     background-color: $duplicate-color;
   }
 }
 
 @keyframes correct {
-  30% {
+  5% {
     background-color: $correct-color;
   }
-  60% {
+  15% {
     background-color: $correct-color;
   }
 }
