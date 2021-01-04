@@ -66,6 +66,12 @@ const mergeScore = (state, msg) => {
   }
 };
 
+function mergeRoundTrophies(state, msg) {
+  if ("roundTrophies" in msg) {
+    state.roundTrophies |= msg["roundTrophies"];
+  }
+}
+
 function mergeTrophies(state, msg) {
   if ("trophies" in msg) {
     if (state.trophies == null) {
@@ -254,6 +260,11 @@ class Main extends React.Component {
       if (state.running && !msg.running) {
         state.navigation = "end";
       }
+      if (!state.running && msg.running) {
+        state.score = null;
+        state.words = null;
+        state.roundTrophies = 0;
+      }
       state.connected = true;
       copyIfExists(state, msg, "maxLevel");
       copyIfExists(state, msg, "running");
@@ -261,16 +272,11 @@ class Main extends React.Component {
       copyIfExists(state, msg, "timeLeft");
       copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
-      copyIfExists(state, msg, "roundTrophies");
       copyIfExists(state, msg, "grid");
       mergeScore(state, msg);
       mergeWords(state, msg);
+      mergeRoundTrophies(state, msg);
       mergeTrophies(state, msg);
-
-      if (!state.running) {
-        state.score = null;
-        state.words = null;
-      }
     }));
     this.updateTimeLeft(msg);
 
@@ -325,14 +331,6 @@ class Main extends React.Component {
     );
   };
   handleQuit = () => {
-    if (OFFLINE_MODE) {
-      this.setState(
-        produce((state) => {
-          state.running = false;
-        })
-      );
-      return;
-    }
     this.requestStop();
   };
   handleWord = (word) => {
