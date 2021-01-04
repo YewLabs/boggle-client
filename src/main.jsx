@@ -261,6 +261,9 @@ class Main extends React.Component {
     if (!this.checkNumGames(msg)) {
       return;
     }
+    if ('debugSeed' in msg) {
+      console.log(`seed: ${msg['debugSeed']}`);
+    }
     this.setState(produce(state => {
       if (state.running && !msg.running) {
         state.navigation = "end";
