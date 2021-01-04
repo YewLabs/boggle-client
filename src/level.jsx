@@ -16,6 +16,10 @@ export default class Level extends React.Component {
   }
 
   componentDidMount() {
+    this.focusInput();
+  }
+
+  focusInput = () => {
     this.submitBox.focus();
   }
 
@@ -51,7 +55,7 @@ export default class Level extends React.Component {
             Words: {this.props.words.length} of {this.props.totwords}, Score: {this.props.score}
           </span>
         </div>
-        <Grid grid={this.props.grid} level={this.props.level.slice(-1)} submit={this.props.onword} />
+        <Grid grid={this.props.grid} level={this.props.level.slice(-1)} submit={this.props.onword} refocus={this.focusInput} />
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => (

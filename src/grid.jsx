@@ -22,6 +22,7 @@ export default class Grid extends React.Component {
   }
   handleMouseUp = (e) => {
     this.mouseUp();
+    this.props.refocus();
   }
 
   mouseDown = (i, pt) => {
