@@ -6,7 +6,7 @@ import Menu from "./menu.jsx";
 import "./main.scss";
 
 const OFFLINE_MODE = window.location.host == "localhost:8080";
-      const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 // TODO: make sure these are eventually false
 const FAKE_SERVER_MODE =
   new URLSearchParams(window.location.search).has("fakeserver");
@@ -101,6 +101,11 @@ class Main extends React.Component {
   }
   initWs = () => {
     if (OFFLINE_MODE) {
+      this.setState(produce(state => {
+        state.connected = true;
+        state.maxLevel = 3;
+        state.running = false;
+      }));
       return;
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
@@ -221,16 +226,51 @@ class Main extends React.Component {
       this.debugStage++;
     }
   }
-  handleGrade = (msg) => {
+  handleWrong = () => {
+    // only for ui response
   }
-  navigate = (target) => {
+  handleDuplicate = () => {
+    // only for ui response
+  }
+  handleCorrect = () => {
+    // only for ui response, do not touch word list
+  }
+  handleGrade = (msg) => {
+    [
+      this.handleWrong,
+      this.handleDuplicate,
+      this.handleGrade
+    ][msg['grade']]();
+  }
+  handleSelectLevel = (level) => {
+    if (OFFLINE_MODE) {
+      this.setState(produce(state => {
+        state.running = true;
+        state.level = level;
+      }));
+      return;
+    }
     this.requestStart(target);
   }
+  navigate = (target) => {
+    this.setState(produce(state => {
+      state.navigation = target;
+    }));
+  }
   handleQuit = () => {
+    if (OFFLINE_MODE) {
+      this.setState(produce(state => {
+        state.running = false;
+      }));
+      return;
+    }
     this.requestStop();
+  }
+  handleWord = () => {
   }
   render() {
     const navigate = (s) => (e) => this.navigate(s);
+    const onselectlevel = (level) => (e) => this.handleSelectLevel(level);
 
     if (!this.state.connected) {
         return <div>Connecting...</div>;
@@ -241,7 +281,7 @@ class Main extends React.Component {
 
     switch (this.state.navigation) {
       case "mainmenu":
-        return <Menu navigate={navigate} />;
+        return <Menu navigate={navigate} onselectlevel={onselectlevel} />;
       case "trophies":
         return <div navigate={navigate} />;
       case "statistics":
