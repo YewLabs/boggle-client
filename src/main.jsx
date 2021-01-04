@@ -6,11 +6,15 @@ import Menu from "./menu.jsx";
 import "./main.scss";
 
 const OFFLINE_MODE = window.location.host == "localhost:8080";
+// TODO: make sure this is eventually false
+const FAKE_SERVER_MODE = true;
 
 const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
-const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
-  ? null
-  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
+const WEBSOCKETS_ENDPOINT = OFFLINE_MODE ? null : (
+  FAKE_SERVER_MODE ?
+  'ws://krawthekrow.me:29782/ws/puzzle/boggle'
+  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`
+);
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
