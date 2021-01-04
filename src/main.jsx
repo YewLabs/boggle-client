@@ -1,9 +1,14 @@
+import Level from "./level.jsx";
+import Menu from "./menu.jsx";
+
+import "./main.scss";
+
 const OFFLINE_MODE = window.location.host == "localhost:8080";
 
-const WEBSOCKETS_PROTOCOL = (location.protocol === "https:") ? "wss" : "ws";
-const WEBSOCKETS_ENDPOINT =
-  OFFLINE_MODE ? null :
-  `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
+const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
+const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
+  ? null
+  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
@@ -32,14 +37,14 @@ class Main extends React.Component {
         window.location.href = "../";
       }
       this.wsSend({
-        "type": "AUTH",
-        "data": urlParams.get("token")
+        type: "AUTH",
+        data: urlParams.get("token"),
       });
 
       // TESTING
       this.wsSend({
-        "type": "start",
-        "round": 1,
+        type: "start",
+        round: 1,
       });
 
       this.handleWsOpen();
@@ -53,40 +58,45 @@ class Main extends React.Component {
       this.ws = null;
       this.handleWsClose();
       this.initWs();
-    }
+    };
   }
   wsSend(msg) {
     const data = JSON.stringify(msg);
     console.log("sending " + data);
     this.ws.send(data);
   }
-  handleWsOpen() {
-  }
+  handleWsOpen() {}
   handleWsClose() {
     // transition to "connecting" state
   }
-  handleWsMessage(msg) {
-  }
-  navigate(target){
+  handleWsMessage(msg) {}
+  navigate(target) {
     this.setState({
       navigation: target,
     });
-  };
+  }
   render() {
+    const navigate = (s) => (e) => this.navigate(s);
+
     switch (this.state.navigation) {
       case "mainmenu":
-        return (
-          <div>
-            Test <button onClick={(e) => this.navigate("xxy")}>asdf</button>
-          </div>
-        );
-      case "xxy":
-        return <div>xxy</div>;
+        return <Menu navigate={navigate} />;
+      case "level1":
+      case "level2":
+      case "level3":
+      case "level4":
+        return <Level navigate={navigate} level={this.state.navigation} />;
+      case "trophies":
+        return <div navigate={navigate} />;
+      case "statistics":
+        return <div navigate={navigate} />;
+      case "leaderboard":
+        return <div navigate={navigate} />;
       default:
         return <div>Loading...</div>;
     }
   }
-};
+}
 
 const domContainer = document.querySelector("#mainContainer");
 ReactDOM.render(<Main />, domContainer);
