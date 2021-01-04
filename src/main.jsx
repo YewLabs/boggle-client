@@ -312,9 +312,9 @@ class Main extends React.Component {
       })
     );
   };
-  handleHiscores = (hiscores) => {
+  handleHiscores = (msg) => {
     this.setState(produce(state => {
-      state.hiscores = hiscores;
+      state.hiscores = msg['hiscores'];
     }));
   }
   handleSelectLevel = (level) => {
@@ -334,11 +334,23 @@ class Main extends React.Component {
     this.requestStart(level);
   };
   navigate = (target) => {
+    if (target == "leaderboard") {
+      this.handleChangeLeaderboardLevel(0);
+    }
     this.setState(
       produce((state) => {
         state.navigation = target;
       })
     );
+  };
+  handleChangeLeaderboardLevel = (level) => {
+    this.setState(
+      produce((state) => {
+        state.level = level;
+        state.hiscores = null;
+      })
+    );
+    this.requestGetHiscores(level);
   };
   handleQuit = () => {
     this.requestStop();
@@ -393,7 +405,7 @@ class Main extends React.Component {
       case "statistics":
         return <Statistics navigate={navigate} />;
       case "leaderboard":
-        return <Leaderboard navigate={navigate} />;
+        return <Leaderboard navigate={navigate} hiscores={this.state.hiscores} onlevel={this.handleChangeLeaderboardLevel} maxlevel={this.state.maxLevel} />;
       case "end":
         return (
           <End
