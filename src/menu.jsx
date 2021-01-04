@@ -1,7 +1,22 @@
+import produce from "immer";
+
+import { trophyDescriptions } from "./data";
+
 export default class Menu extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      description: "",
+    };
   }
+
+  setDescription = (i, j) => {
+    this.setState(
+      produce((state) => {
+        state.description = trophyDescriptions[i][j];
+      })
+    );
+  };
 
   render() {
     const buttons = [];
@@ -18,16 +33,25 @@ export default class Menu extends React.Component {
     }
     return (
       <div className="menu">
-        <div className="label-play">Play:</div>
-        <div className="label-trophies">Trophies:</div>
         <div className="play">{buttons}</div>
         <div className="trophies">
           {[0, 1, 2, 3].map((i) =>
-            [0, 1, 2, 3].map((j) => (
-              <div className="trophy" key={`${i}-${j}`}>
-                {this.props.trophies[4 * i + j]}
-              </div>
-            ))
+            [0, 1, 2, 3].map((j) => {
+              const letter = this.props.trophies[4 * i + j];
+              return (
+                <div
+                  className="trophy"
+                  key={`${i}-${j}`}
+                  onMouseOver={(e) => this.setDescription(i, j)}
+                >
+                  <div className="stand"></div>
+                  {letter !== "?" && (
+                    <img src="./static/trophy.svg" draggable="false" />
+                  )}
+                  <span className="letter">{letter}</span>
+                </div>
+              );
+            })
           )}
         </div>
         <button
@@ -36,7 +60,7 @@ export default class Menu extends React.Component {
         >
           Statistics
         </button>
-        <div className="description">description</div>
+        <div className="description">{this.state.description}</div>
         <button
           className="leaderboard"
           onClick={this.props.navigate("leaderboard")}

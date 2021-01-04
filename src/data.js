@@ -109,6 +109,33 @@ export const adjacent = [
     Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2) === 1,
 ];
 
+export const trophyDescriptions = [
+  [
+    "get n% words in level 1",
+    "get n% points in level 1",
+    "find a longest word in level 1",
+    "find a special word in level 1",
+  ],
+  [
+    "get n% words in level 2",
+    "get n% points in level 2",
+    "find a longest word in level 2",
+    "find a special word in level 2",
+  ],
+  [
+    "get n% words in level 3",
+    "get n% points in level 3",
+    "find a longest word in level 3",
+    "find a special word in level 3",
+  ],
+  [
+    "get n% words in level 4",
+    "get n% points in level 4",
+    "find a longest word in level 4",
+    "find a special word in level 4",
+  ],
+];
+
 export const sampleBoard = [
   [
     ["#", "#", "#", "#", "#", "#"],

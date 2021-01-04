@@ -61,11 +61,10 @@
 .menu {
   display: grid;
   grid-template-areas:
-    "label-play label-trophies"
     "play trophies"
     "statistics description"
     "leaderboard blanks";
-  grid-template-rows: 1.25em 4fr 2em 2em;
+  grid-template-rows: 4fr 2em 2em;
   grid-template-columns: 1fr 4fr;
   gap: 1rem;
 
@@ -87,10 +86,17 @@
       height: calc(25% - 0.75rem);
       margin: 0;
       width: 100%;
+
+      &:disabled {
+        background-color: $secondary-color;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        cursor: default;
+      }
     }
   }
 
-  .description, .blanks {
+  .description,
+  .blanks {
     @include flex-ccc;
   }
 
@@ -124,15 +130,36 @@
 .trophies {
   @include flex-ccc;
 
-  table {
-    margin-bottom: 1em;
+  .trophy {
+    @include flex-ccc;
+    height: 100px;
+    perspective: 100px;
+    position: relative;
+
+    img {
+      z-index: 1;
+    }
+
+    .stand {
+      position: absolute;
+      background: #795548;
+      bottom: -5px;
+      height: 20%;
+      transform: rotateX(40deg);
+      width: 70%;
+    }
+
+    .letter {
+      color: #726400;
+      font-size: 1.25em;
+      font-weight: bold;
+      position: absolute;
+      top: 20px;
+      z-index: 2;
+    }
   }
 }
 
-.statistics {
-  @include flex-ccc;
-}
-
-.leaderboard {
+.statistics .leaderboard, .description {
   @include flex-ccc;
 }
