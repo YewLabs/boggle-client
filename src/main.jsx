@@ -380,7 +380,7 @@ class Main extends React.Component {
     const onselectlevel = (level) => (e) => this.handleSelectLevel(level);
 
     if (!this.state.connected) {
-      return <div>Connecting...</div>;
+      return <div class="msg">Connecting...</div>;
     }
     if (this.state.running) {
       return (
@@ -430,7 +430,7 @@ class Main extends React.Component {
           />
         );
       default:
-        return <div>Loading...</div>;
+        return <div class="msg">Loading...</div>;
     }
   }
 }
