@@ -59,7 +59,7 @@ export default class Grid extends React.Component {
           : this.props.grid[x][y][z];
       })
       .join("");
-    this.props.submit(word);
+    if (word !== "") this.props.submit(word);
     this.setState(
       produce((state) => {
         state.dragging = false;

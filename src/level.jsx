@@ -29,7 +29,9 @@ export default class Level extends React.Component {
 
   onInput = (e) => {
     e.preventDefault();
-    this.props.onword(this.state.value);
+    if (this.state.value !== "") {
+      this.props.onword(this.state.value)
+    };
     this.setState(
       produce((state) => {
         state.value = "";
