@@ -79,10 +79,17 @@ export default class Level extends React.Component {
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => {
-              const isSpecial = (this.props.special != null) && (w[0] == this.props.special);
-              return <span key={w[0]} className={isSpecial?"special":""}><span className="score">{w[1]}</span> {w[0]}</span>;
+              const isSpecial = this.props.special != null && w[0] == this.props.special;
+              return (
+                <span key={w[0]} className={isSpecial ? "special" : ""}>
+                  <span className={`
+                    score
+                    ${w[1].toString().length > 3 ? "small" : ""}
+                    `}>{w[1]}</span> {w[0]}
+                </span>
+              );
             })}
-          </div>
+          </div>;
           <form onSubmit={this.onInput}>
             <input
               onChange={this.handleChange}

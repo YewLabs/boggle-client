@@ -10,22 +10,42 @@ export default class Leaderboard extends React.Component {
     if (this.props.hiscores != null) {
       contents = [];
       for (const entry of this.props.hiscores) {
-        contents.push(<div key={entry[0]}>{entry[0]} {entry[1] / HISCORE_SCALE * 100}%</div>);
+        contents.push(
+          <tr key={entry[0]}>
+            <td>{entry[0]}</td>
+            <td>{(entry[1] / HISCORE_SCALE) * 100}%</td>
+          </tr>
+        );
       }
     }
     const buttons = [];
     for (let i = 0; i < 4; i++) {
       if (i <= this.props.maxlevel) {
-        buttons.push(<button key={i} onClick={(e) => {this.props.onlevel(i)}}>{i+1}</button>);
+        buttons.push(
+          <button
+            key={i}
+            onClick={(e) => {
+              this.props.onlevel(i);
+            }}
+          >
+            {i + 1}
+          </button>
+        );
       }
     }
     return (
       <div className="leaderboard">
+        <div className="levels">{buttons}</div>
+        <table>
+          <tr>
+            <th>Team</th>
+            <th>Percent max</th>
+          </tr>
+          {contents}
+        </table>
         <button onClick={this.props.navigate("mainmenu")}>
           Return to menu
         </button>
-        { buttons }
-        { contents }
       </div>
     );
   }

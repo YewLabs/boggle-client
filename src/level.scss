@@ -77,7 +77,11 @@
           display: inline-block;
           font-weight: normal;
           text-align: right;
-          width: 2em;
+          width: 2.5rem;
+
+          &.small {
+            font-size: 0.8em;
+          }
         }
       }
     }
