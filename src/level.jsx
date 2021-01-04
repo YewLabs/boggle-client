@@ -21,7 +21,7 @@ export default class Level extends React.Component {
 
   focusInput = () => {
     this.submitBox.focus();
-  }
+  };
 
   handleChange = (e) => {
     this.setState(
@@ -34,8 +34,8 @@ export default class Level extends React.Component {
   onInput = (e) => {
     e.preventDefault();
     if (this.state.value !== "") {
-      this.props.onword(this.state.value)
-    };
+      this.props.onword(this.state.value);
+    }
     this.setState(
       produce((state) => {
         state.value = "";
@@ -43,19 +43,37 @@ export default class Level extends React.Component {
     );
   };
 
+  niceTime = () => {
+    const totSeconds = Math.floor(this.props.timeleft / 1000);
+    const minutes = Math.floor(totSeconds / 60);
+    const seconds = totSeconds - minutes * 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   render() {
+    const width = Math.max((100 * this.props.timeleft) / this.props.tottime, 0);
     return (
       <div className="level">
         <div className="toolbar">
           <button className="gray" onClick={this.props.onquit}>
             Quit
           </button>
-          <span className="time">Time: {this.props.timeleft}</span>
+          <div className="timerwrapper">
+            <div className="bartimer" style={{ width: `${width}%` }}>
+              <span className="time">{this.niceTime()}</span>
+            </div>
+          </div>
           <span className="score">
-            Words: {this.props.words.length} of {this.props.totwords}, Score: {this.props.score}
+            Words: {this.props.words.length} of {this.props.totwords}, Score:{" "}
+            {this.props.score}
           </span>
         </div>
-        <Grid grid={this.props.grid} level={this.props.level.slice(-1)} submit={this.props.onword} refocus={this.focusInput} />
+        <Grid
+          grid={this.props.grid}
+          level={this.props.level.slice(-1)}
+          submit={this.props.onword}
+          refocus={this.focusInput}
+        />
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => (
@@ -67,7 +85,9 @@ export default class Level extends React.Component {
               onChange={this.handleChange}
               type="text"
               value={this.state.value}
-              ref={(el) => {this.submitBox = el;}}
+              ref={(el) => {
+                this.submitBox = el;
+              }}
             />
             <button type="submit">Send</button>
           </form>

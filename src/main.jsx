@@ -21,7 +21,7 @@ const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
   : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
-const TICK_INTERVAL = 1000 / 30; // in ms
+const TICK_INTERVAL = 1000 / 10; // in ms, make larger if performance suffers
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
@@ -118,8 +118,11 @@ class Main extends React.Component {
           state.connected = true;
           state.maxLevel = 3;
           state.running = false;
+          state.timeLeft = 300 * 1000;
+          state.totTime = 300 * 1000;
         })
       );
+      this.updateTimeLeft({ timeLeft: 300 * 1000 });
       return;
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
@@ -331,6 +334,7 @@ class Main extends React.Component {
           grid={this.state.grid}
           level={`level${this.state.level + 1}`}
           timeleft={this.state.timeLeft}
+          tottime={this.state.totTime}
           totwords={this.state.totNumWords}
           score={this.state.score}
           words={this.state.words}

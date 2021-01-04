@@ -14,6 +14,33 @@
     grid-column: 1 / 3;
   }
 
+  .timerwrapper {
+    background-color: $secondary-color;
+    border-radius: 4px;
+    position: relative;
+    width: 60%;
+
+    .bartimer {
+      background-color: $theme-color;
+      grid-column: 1 / 3;
+      height: 2em;
+      transition: width 0.1s;
+
+      .time {
+        color: #fff;
+        font-weight: bold;
+        left: calc(50% - 1em);
+        position: absolute;
+        text-align: center;
+        top: 0.4em;
+      }
+    }
+  }
+
+  .score {
+    width: 25%;
+  }
+
   .inputs {
     display: flex;
     flex-direction: column;
