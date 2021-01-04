@@ -24,6 +24,10 @@ const copyIfExists = (state, msg, prop) => {
 
 const mergeWords = (state, msg) => {
   if ('words' in msg) {
+    if (state.words == null) {
+      state.words = msg['words'];
+      return;
+    }
     for (const word of msg['words']) {
       if (!state.words.includes(word)) {
         state.words.push(word);
@@ -32,8 +36,29 @@ const mergeWords = (state, msg) => {
   }
 }
 
-const mergeTrophies = (state, msg) => {
-  // TODO
+const mergeScore = (state, msg) => {
+  if ('score' in msg) {
+    if (state.score == null) {
+      state.score = msg['score'];
+      return;
+    }
+    if (msg['score'] > state.score) {
+      state.score = msg['score'];
+    }
+  }
+}
+
+function mergeTrophies(state, msg) {
+  if ('trophies' in msg) {
+    if (state.trophies == null) {
+      state.trophies = msg['trophies'];
+      return;
+    }
+    state.trophies = [...state.trophies].map((c, i) => {
+      const trophy = msg['trophies'][i];
+      return (trophy == '?') ? c : trophy;
+    }).join('');
+  }
 }
 
 class Main extends React.Component {
@@ -54,10 +79,12 @@ class Main extends React.Component {
       level: null,
       timeLeft: null,
       words: null,
+      trophies: null,
     };
 
     // FOR DEBUGGING ONLY
     window.main = this;
+    this.debugStage = 0;
   }
   componentDidMount() {
     this.initWs();
@@ -108,7 +135,8 @@ class Main extends React.Component {
   handleWsMessage = (msg) => {
     const msg_type = msg['type'];
     const handlers = {
-      'full': this.handleFullUpdate.bind(this),
+      "full": this.handleFullUpdate.bind(this),
+      "grade": this.handleGrade,
     };
     handlers[msg_type](msg);
   }
@@ -159,10 +187,21 @@ class Main extends React.Component {
       copyIfExists(state, msg, 'running');
       copyIfExists(state, msg, 'level');
       copyIfExists(state, msg, 'timeLeft');
+      mergeScore(state, msg);
       mergeWords(state, msg);
       mergeTrophies(state, msg);
     }));
     this.updateTimeLeft(msg);
+
+    if (this.debugStage == 0) {
+      this.requestWord('orange');
+      this.requestWord('yellow');
+      this.requestWord('green');
+      this.requestWord('green');
+      this.debugStage++;
+    }
+  }
+  handleGrade = (msg) => {
   }
   navigate = (target) => {
     this.setState(produce(state => {
