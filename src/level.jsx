@@ -27,14 +27,14 @@ export default class Level extends React.Component {
     );
   };
 
-  submit = (e) => {
+  onInput = (e) => {
     e.preventDefault();
+    this.props.onword(this.state.value);
     this.setState(
       produce((state) => {
         state.value = "";
       })
     );
-    this.props.onword(this.state.value);
   };
 
   render() {
@@ -49,14 +49,14 @@ export default class Level extends React.Component {
             Words: {this.props.words.length} of {this.props.totwords}, Score: {this.props.score}
           </span>
         </div>
-        <Grid level={this.props.level.slice(-1)} grid={this.props.grid} />
+        <Grid grid={this.props.grid} level={this.props.level.slice(-1)} submit={this.props.onword} />
         <div className="inputs">
           <div className="words">
             {this.props.words.map((w, i) => (
               <span key={i}>{w}</span>
             ))}
           </div>
-          <form onSubmit={this.submit}>
+          <form onSubmit={this.onInput}>
             <input
               onChange={this.handleChange}
               type="text"

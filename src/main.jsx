@@ -2,22 +2,24 @@ import produce from "immer";
 
 import Level from "./level.jsx";
 import Menu from "./menu.jsx";
+import { sampleBoard } from "./data";
 
 import "./main.scss";
 
 const OFFLINE_MODE = window.location.host == "localhost:8080";
 const urlParams = new URLSearchParams(window.location.search);
 // TODO: make sure these are eventually false
-const FAKE_SERVER_MODE =
-  new URLSearchParams(window.location.search).has("fakeserver");
+const FAKE_SERVER_MODE = new URLSearchParams(window.location.search).has(
+  "fakeserver"
+);
 const SERVER_TEST = false;
 
 const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
-const WEBSOCKETS_ENDPOINT = OFFLINE_MODE ? null : (
-  FAKE_SERVER_MODE ?
-  "ws://krawthekrow.me:29782/ws/puzzle/boggle"
-  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`
-);
+const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
+  ? null
+  : FAKE_SERVER_MODE
+  ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
+  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
@@ -30,7 +32,7 @@ const copyIfExists = (state, msg, prop) => {
   if (prop in msg) {
     state[prop] = msg[prop];
   }
-}
+};
 
 const mergeWords = (state, msg) => {
   if ("words" in msg) {
@@ -44,7 +46,7 @@ const mergeWords = (state, msg) => {
       }
     }
   }
-}
+};
 
 const mergeScore = (state, msg) => {
   if ("score" in msg) {
@@ -56,7 +58,7 @@ const mergeScore = (state, msg) => {
       state.score = msg["score"];
     }
   }
-}
+};
 
 function mergeTrophies(state, msg) {
   if ("trophies" in msg) {
@@ -64,10 +66,12 @@ function mergeTrophies(state, msg) {
       state.trophies = msg["trophies"];
       return;
     }
-    state.trophies = [...state.trophies].map((c, i) => {
-      const trophy = msg["trophies"][i];
-      return (trophy == "?") ? c : trophy;
-    }).join("");
+    state.trophies = [...state.trophies]
+      .map((c, i) => {
+        const trophy = msg["trophies"][i];
+        return trophy == "?" ? c : trophy;
+      })
+      .join("");
   }
 }
 
@@ -90,6 +94,7 @@ class Main extends React.Component {
       totNumWords: null,
       level: null,
       timeLeft: null,
+      grid: [],
       words: null,
       trophies: null,
       grid: null,
@@ -104,11 +109,13 @@ class Main extends React.Component {
   }
   initWs = () => {
     if (OFFLINE_MODE) {
-      this.setState(produce(state => {
-        state.connected = true;
-        state.maxLevel = 3;
-        state.running = false;
-      }));
+      this.setState(
+        produce((state) => {
+          state.connected = true;
+          state.maxLevel = 3;
+          state.running = false;
+        })
+      );
       return;
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
@@ -139,51 +146,53 @@ class Main extends React.Component {
       this.handleWsClose();
       this.initWs();
     };
-  }
+  };
   wsSend = (msg) => {
     const data = JSON.stringify(msg);
     console.log("sending " + data);
     this.ws.send(data);
-  }
-  handleWsOpen = () => {}
+  };
+  handleWsOpen = () => {};
   handleWsClose = () => {
     this.numGames = 0;
-    this.setState(produce(this.state, state => {
-      state.connected = false;
-    }));
-  }
+    this.setState(
+      produce(this.state, (state) => {
+        state.connected = false;
+      })
+    );
+  };
   handleWsMessage = (msg) => {
     const msg_type = msg["type"];
     const handlers = {
-      "full": this.handleFullUpdate,
-      "grade": this.handleGrade,
+      full: this.handleFullUpdate,
+      grade: this.handleGrade,
     };
     handlers[msg_type](msg);
-  }
+  };
   requestStart = (level) => {
     this.wsSend({
-      "type": "start",
-      "level": level,
+      type: "start",
+      level: level,
     });
-  }
+  };
   requestGetUpdate = () => {
     this.wsSend({
-      "type": "getUpdate",
+      type: "getUpdate",
     });
-  }
+  };
   requestStop = () => {
     this.wsSend({
-      "type": "stop",
-      "numGames": this.numGames,
+      type: "stop",
+      numGames: this.numGames,
     });
-  }
+  };
   requestWord = (word) => {
     this.wsSend({
-      "type": "word",
-      "numGames": this.numGames,
-      "word": word,
+      type: "word",
+      numGames: this.numGames,
+      word: word,
     });
-  }
+  };
   checkNumGames = (msg) => {
     const numGamesServer = msg["numGames"];
     if (numGamesServer < this.numGames) {
@@ -192,7 +201,7 @@ class Main extends React.Component {
     }
     this.numGames = numGamesServer;
     return true;
-  }
+  };
   updateTimeLeft = (msg) => {
     if (!("timeLeft" in msg)) {
       return;
@@ -201,7 +210,7 @@ class Main extends React.Component {
       clearTimeout(this.stopTimer);
     }
     this.stopTimer = setTimeout(this.requestStop, msg["timeLeft"]);
-  }
+  };
   handleFullUpdate = (msg) => {
     if (!this.checkNumGames(msg)) {
       return;
@@ -219,14 +228,14 @@ class Main extends React.Component {
       mergeWords(state, msg);
       mergeTrophies(state, msg);
 
-      if (state.running) {
-        state.navigation = "mainmenu";
-      }
-      else {
-        state.score = null;
-        state.words = null;
-      }
-    }));
+        if (state.running) {
+          state.navigation = "mainmenu";
+        } else {
+          state.score = null;
+          state.words = null;
+        }
+      })
+    );
     this.updateTimeLeft(msg);
 
     if (SERVER_TEST && this.debugStage == 0) {
@@ -236,23 +245,21 @@ class Main extends React.Component {
       this.requestWord("green");
       this.debugStage++;
     }
-  }
+  };
   handleWrong = () => {
     // only for ui response
-  }
+  };
   handleDuplicate = () => {
     // only for ui response
-  }
+  };
   handleCorrect = () => {
     // only for ui response, do not touch word list
-  }
+  };
   handleGrade = (msg) => {
-    [
-      this.handleWrong,
-      this.handleDuplicate,
-      this.handleCorrect,
-    ][msg["grade"]]();
-  }
+    [this.handleWrong, this.handleDuplicate, this.handleCorrect][
+      msg["grade"]
+    ]();
+  };
   handleSelectLevel = (level) => {
     if (OFFLINE_MODE) {
       this.setState(produce(state => {
@@ -261,46 +268,62 @@ class Main extends React.Component {
         state.words = [];
         state.score = 0;
         state.totNumWords = 10;
-        state.grid = 'abcdefghijkl';
+        state.grid = sampleBoard[level];
         // bitmask indicating which trophies we got
         state.roundTrophies = 0b1100;
       }));
       return;
     }
     this.requestStart(level);
-  }
+  };
   navigate = (target) => {
-    this.setState(produce(state => {
-      state.navigation = target;
-    }));
-  }
+    this.setState(
+      produce((state) => {
+        state.navigation = target;
+      })
+    );
+  };
   handleQuit = () => {
     if (OFFLINE_MODE) {
-      this.setState(produce(state => {
-        state.running = false;
-      }));
+      this.setState(
+        produce((state) => {
+          state.running = false;
+        })
+      );
       return;
     }
     this.requestStop();
-  }
+  };
   handleWord = (word) => {
     if (OFFLINE_MODE) {
-      this.setState(produce(state => {
-        state.words.push(word);
-      }));
+      this.setState(
+        produce((state) => {
+          state.words.push(word);
+        })
+      );
       return;
     }
     this.requestWord(word);
-  }
+  };
   render() {
     const navigate = (s) => (e) => this.navigate(s);
     const onselectlevel = (level) => (e) => this.handleSelectLevel(level);
 
     if (!this.state.connected) {
-        return <div>Connecting...</div>;
+      return <div>Connecting...</div>;
     }
     if (this.state.running) {
-        return <Level level={`level${this.state.level + 1}`} grid={this.state.grid} score={this.state.score} totwords={this.state.totNumWords} words={this.state.words} onword={this.handleWord} onquit={this.handleQuit} />;
+      return (
+        <Level
+          grid={this.state.grid}
+          level={`level${this.state.level + 1}`}
+          totwords={this.state.totNumWords}
+          score={this.state.score}
+          words={this.state.words}
+          onword={this.handleWord}
+          onquit={this.handleQuit}
+        />
+      );
     }
 
     switch (this.state.navigation) {
@@ -311,6 +334,8 @@ class Main extends React.Component {
       case "statistics":
         return <div navigate={navigate} />;
       case "leaderboard":
+        return <div navigate={navigate} />;
+      case "end":
         return <div navigate={navigate} />;
       default:
         return <div>Loading...</div>;

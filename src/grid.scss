@@ -11,7 +11,7 @@
 
   .letter {
     align-items: center;
-    background-color: #000;
+    background-color: darken($secondary-color, 20%);
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
@@ -23,7 +23,10 @@
     width: 2em;
 
     &.selected {
-      background-color: #999;
+      background-color: desaturate(darken($theme-color, 10%), 10%);
+    }
+    &.last {
+      background-color: adjust-hue(saturate($theme-color, 10%), -40deg);
     }
   }
 }
