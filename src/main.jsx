@@ -295,6 +295,7 @@ class Main extends React.Component {
     this.requestStop();
   };
   handleWord = (word) => {
+    word = word.toLowerCase();
     if (OFFLINE_MODE) {
       this.setState(
         produce((state) => {

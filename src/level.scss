@@ -4,7 +4,7 @@
   align-items: stretch;
   display: grid;
   gap: 1em;
-  grid-template: 2em 1fr / 1fr 1fr;
+  grid-template: 2em 1fr / 400px 1fr;
   justify-items: stretch;
 
   .toolbar {
@@ -19,16 +19,17 @@
     flex-direction: column;
 
     .words {
-      height: 550px;
+      align-content: start;
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
+      height: 550px;
 
       span {
         border-bottom: 1px solid rgba($secondary-color, 0.5);
         height: 1.5rem;
         margin-top: 0.5rem;
-        max-width: 33%;
+        width: 25%;
       }
     }
 

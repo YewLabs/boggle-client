@@ -5,7 +5,8 @@
   position: relative;
 
   img {
-    height: 550px;
+    width: 400px;
+    max-height: 550px;
     position: relative;
   }
 
@@ -33,41 +34,40 @@
 
 .level1 {
   img {
-    top: 100px;
-    left: 80px;
+    top: 80px;
+    left: 70px;
   }
-
   .letters {
-    transform: scale(1.9) translate(-363px, 75px);
+    transform: scale(1.35) translate(-358px, 76px);
   }
 }
+
 .level2 {
   img {
-    top: 90px;
+    top: 65px;
     left: 40px;
   }
-
   .letters {
-    transform: scale(1.75) translate(-390px, 80px);
+    transform: scale(1.25) translate(-373px, 78px);
   }
 }
+
 .level3 {
   img {
     top: 30px;
     left: 20px;
   }
-
   .letters {
-    transform: scale(1.55) translate(-393px, 73px);
+    transform: scale(1.1) translate(-392px, 75px);
   }
 }
+
 .level4 {
   img {
     top: 30px;
-    left: 110px;
+    left: 30px;
   }
-
   .letters {
-    transform: translate(-295px, -20px);
+    transform: translate(-414px, -20px);
   }
 }
