@@ -53,11 +53,19 @@
       flex-wrap: wrap;
       height: 550px;
 
-      span {
+      > span {
+        animation: fadein 2s;
         border-bottom: 1px solid rgba($secondary-color, 0.5);
         height: 1.5rem;
         margin-top: 0.5rem;
         width: 25%;
+
+        .score {
+          color: $secondary-color;
+          display: inline-block;
+          text-align: right;
+          width: 1.75em;
+        }
       }
     }
 

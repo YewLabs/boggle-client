@@ -6,7 +6,7 @@ export default class End extends React.Component {
   render() {
     return (
       <div className="end">
-        <p className="level">Level {this.props.level}</p>
+        <p className="level">Level {this.props.level + 1}</p>
         <p className="points">
           You found {this.props.words} of {this.props.totwords} words, for{" "}
           {this.props.score} points.

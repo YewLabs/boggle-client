@@ -59,41 +59,52 @@
 }
 
 .menu {
-  display: flex;
+  display: grid;
+  grid-template-areas:
+    "label-play label-trophies"
+    "play trophies"
+    "statistics description"
+    "leaderboard blanks";
+  grid-template-rows: 1.25em 4fr 2em 2em;
+  grid-template-columns: 1fr 4fr;
+  gap: 1rem;
 
-  .levels {
-    @include flex-ccc;
-    box-sizing: border-box;
-    padding-right: 1em;
-    width: 50%;
+  .label-play,
+  .label-trophies {
+    font-weight: bold;
+    font-size: 1.25em;
+    text-align: center;
+  }
 
-    .levels-buttons {
-      text-align: center;
-      p {
-        margin: 0.5em 0 0.75em;
-      }
+  .play {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-      button {
-        box-sizing: border-box;
-        width: calc(50% - 1em);
-        margin: 0.25em;
-      }
-      button:disabled {
-        visibility: hidden;
-      }
+    button {
+      box-sizing: border-box;
+      font-size: 2.5em;
+      height: calc(25% - 0.75rem);
+      margin: 0;
+      width: 100%;
     }
   }
 
-  .etc {
+  .description, .blanks {
     @include flex-ccc;
-    box-sizing: border-box;
-    padding-left: 1em;
-    width: 50%;
+  }
 
-    button {
-      width: 100%;
-      margin: 0.25em 0;
-    }
+  .trophies {
+    display: grid;
+    grid: repeat(4, 1fr) / repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .statistics,
+  .leaderboard {
+    height: 100%;
+    width: 100%;
+    margin: 0;
   }
 }
 

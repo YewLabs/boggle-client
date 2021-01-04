@@ -3,7 +3,6 @@ import produce from "immer";
 import Menu from "./menu.jsx";
 import Level from "./level.jsx";
 import End from "./end.jsx";
-import Trophies from "./trophies.jsx";
 import Statistics from "./statistics.jsx";
 import Leaderboard from "./leaderboard.jsx";
 import { sampleBoard } from "./data";
@@ -52,6 +51,7 @@ const mergeWords = (state, msg) => {
         state.words.push(w);
       }
     }
+    state.words.sort();
   }
 };
 
@@ -290,32 +290,6 @@ class Main extends React.Component {
       this.debugStage++;
     }
   };
-  handleWrong = (word) => {
-    // only for ui response
-    const fulfilled = () =>
-      this.setState(
-        produce((state) => {
-          state.wordResponses = state.wordResponses.filter(
-            (x) => x.word !== word
-          );
-        })
-      );
-    this.setState(
-      produce((state) => {
-        state.wordResponses.push({
-          word,
-          fulfilled,
-          response: "wrong",
-        });
-      })
-    );
-  };
-  handleDuplicate = (word) => {
-    // only for ui response
-  };
-  handleCorrect = (word) => {
-    // only for ui response, do not touch word list
-  };
   handleGrade = (msg) => {
     const response = ["wrong", "duplicate", "correct"][msg["grade"]];
     const word = msg["word"];
@@ -404,29 +378,29 @@ class Main extends React.Component {
 
     switch (this.state.navigation) {
       case "mainmenu":
-        return <Menu navigate={navigate} maxlevel={this.state.maxLevel} onselectlevel={onselectlevel} />;
-      case "trophies":
-        return <Trophies
-          navigate={navigate}
-          trophies={this.state.trophies}
-        />;
+        return (
+          <Menu
+            navigate={navigate}
+            maxlevel={this.state.maxLevel}
+            onselectlevel={onselectlevel}
+            trophies={this.state.trophies}
+          />
+        );
       case "statistics":
-        return <Statistics
-          navigate={navigate}
-        />;
+        return <Statistics navigate={navigate} />;
       case "leaderboard":
-        return <Leaderboard
-          navigate={navigate}
-        />;
+        return <Leaderboard navigate={navigate} />;
       case "end":
-        return <End
-          level={this.state.level}
-          navigate={navigate}
-          roundtrophies={this.state.roundTrophies}
-          totwords={this.state.totNumWords}
-          score={this.state.score}
-          words={this.state.words?.length}
-        />;
+        return (
+          <End
+            level={this.state.level}
+            navigate={navigate}
+            roundtrophies={this.state.roundTrophies}
+            totwords={this.state.totNumWords}
+            score={this.state.score}
+            words={this.state.words?.length}
+          />
+        );
       default:
         return <div>Loading...</div>;
     }

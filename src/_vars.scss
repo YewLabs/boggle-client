@@ -11,6 +11,13 @@ $correct-color: #4caf50;
   justify-content: center;
 }
 
+@keyframes fadein {
+  0% {
+    color: $correct-color;
+    text-shadow: 0 0 5px $correct-color;
+  }
+}
+
 @keyframes wrong {
   5% {
     background-color: $wrong-color;
