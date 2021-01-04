@@ -11,7 +11,13 @@ export default class Grid extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener("mouseup", (e) => this.mouseUp());
+    window.addEventListener("mouseup", this.handleMouseUp);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("mouseup", this.handleMouseUp);
+  }
+  handleMouseUp = (e) => {
+    this.mouseUp();
   }
 
   mouseDown = (i) => {

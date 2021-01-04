@@ -152,7 +152,7 @@ class Main extends React.Component {
   handleWsMessage = (msg) => {
     const msg_type = msg["type"];
     const handlers = {
-      "full": this.handleFullUpdate.bind(this),
+      "full": this.handleFullUpdate,
       "grade": this.handleGrade,
     };
     handlers[msg_type](msg);
@@ -197,7 +197,7 @@ class Main extends React.Component {
     if (this.stopTimer != null) {
       clearTimeout(this.stopTimer);
     }
-    this.stopTimer = setTimeout(this.requestStop.bind(this), msg["timeLeft"]);
+    this.stopTimer = setTimeout(this.requestStop, msg["timeLeft"]);
   }
   handleFullUpdate = (msg) => {
     if (!this.checkNumGames(msg)) {
@@ -212,8 +212,13 @@ class Main extends React.Component {
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeTrophies(state, msg);
+
       if (state.running) {
         state.navigation = "mainmenu";
+      }
+      else {
+        state.score = null;
+        state.words = null;
       }
     }));
     this.updateTimeLeft(msg);
@@ -239,18 +244,19 @@ class Main extends React.Component {
     [
       this.handleWrong,
       this.handleDuplicate,
-      this.handleGrade
-    ][msg['grade']]();
+      this.handleCorrect,
+    ][msg["grade"]]();
   }
   handleSelectLevel = (level) => {
     if (OFFLINE_MODE) {
       this.setState(produce(state => {
         state.running = true;
         state.level = level;
+        state.words = [];
       }));
       return;
     }
-    this.requestStart(target);
+    this.requestStart(level);
   }
   navigate = (target) => {
     this.setState(produce(state => {
@@ -266,7 +272,14 @@ class Main extends React.Component {
     }
     this.requestStop();
   }
-  handleWord = () => {
+  handleWord = (word) => {
+    if (OFFLINE_MODE) {
+      this.setState(produce(state => {
+        state.words.push(word);
+      }));
+      return;
+    }
+    this.requestWord(word);
   }
   render() {
     const navigate = (s) => (e) => this.navigate(s);
@@ -276,7 +289,7 @@ class Main extends React.Component {
         return <div>Connecting...</div>;
     }
     if (this.state.running) {
-        return <Level level={`level${this.state.level + 1}`} score={this.state.score} onquit={this.handleQuit} />;
+        return <Level level={`level${this.state.level + 1}`} score={this.state.score} words={this.state.words} onword={this.handleWord} onquit={this.handleQuit} />;
     }
 
     switch (this.state.navigation) {

@@ -10,8 +10,12 @@ export default class Level extends React.Component {
       time: 0,
       totalWords: 25,
       value: "",
-      words: [],
     };
+    this.submitBox = null;
+  }
+
+  componentDidMount() {
+    this.submitBox.focus();
   }
 
   handleChange = (e) => {
@@ -26,10 +30,10 @@ export default class Level extends React.Component {
     e.preventDefault();
     this.setState(
       produce((state) => {
-        state.words.push(this.state.value);
         state.value = "";
       })
     );
+    this.props.onword(this.state.value);
   };
 
   render() {
@@ -41,14 +45,14 @@ export default class Level extends React.Component {
           </button>
           <span className="time">Time: {this.state.time}</span>
           <span className="score">
-            Words: {this.state.words.length} of {this.state.totalWords}
+            Words: {this.props.words.length} of {this.state.totalWords}
           </span>
         </div>
         <Grid level={this.props.level.slice(-1)} />
         <div className="inputs">
           <div className="words">
-            {this.state.words.map((w) => (
-              <span>{w}</span>
+            {this.props.words.map((w, i) => (
+              <span key={i}>{w}</span>
             ))}
           </div>
           <form onSubmit={this.submit}>
@@ -56,6 +60,7 @@ export default class Level extends React.Component {
               onChange={this.handleChange}
               type="text"
               value={this.state.value}
+              ref={(el) => {this.submitBox = el;}}
             />
             <button type="submit">Send</button>
           </form>
