@@ -1,8 +1,11 @@
 import produce from "immer";
 
-import End from "./end.jsx";
-import Level from "./level.jsx";
 import Menu from "./menu.jsx";
+import Level from "./level.jsx";
+import End from "./end.jsx";
+import Trophies from "./trophies.jsx";
+import Statistics from "./statistics.jsx";
+import Leaderboard from "./leaderboard.jsx";
 import { sampleBoard } from "./data";
 
 import "./main.scss";
@@ -119,11 +122,12 @@ class Main extends React.Component {
           state.connected = true;
           state.maxLevel = 3;
           state.running = false;
-          state.timeLeft = 2 * 1000;
-          state.totTime = 2 * 1000;
+          state.timeLeft = 300 * 1000;
+          state.totTime = 300 * 1000;
+          state.trophies = "????????????????";
         })
       );
-      this.updateTimeLeft({ timeLeft: 2 * 1000 });
+      this.updateTimeLeft({ timeLeft: 300 * 1000 });
       return;
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
@@ -370,11 +374,18 @@ class Main extends React.Component {
       case "mainmenu":
         return <Menu navigate={navigate} onselectlevel={onselectlevel} />;
       case "trophies":
-        return <div navigate={navigate} />;
+        return <Trophies
+          navigate={navigate}
+          trophies={this.state.trophies}
+        />;
       case "statistics":
-        return <div navigate={navigate} />;
+        return <Statistics
+          navigate={navigate}
+        />;
       case "leaderboard":
-        return <div navigate={navigate} />;
+        return <Leaderboard
+          navigate={navigate}
+        />;
       case "end":
         return <End
           level={this.state.level}

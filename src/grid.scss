@@ -11,14 +11,12 @@
   }
 
   .letter {
-    align-items: center;
+    @include flex-ccc;
     background-color: darken($secondary-color, 20%);
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
-    display: flex;
     height: 2em;
-    justify-content: center;
     position: absolute;
     user-select: none;
     width: 2em;

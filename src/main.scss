@@ -62,10 +62,7 @@
   display: flex;
 
   .levels {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    @include flex-ccc;
     box-sizing: border-box;
     padding-right: 1em;
     width: 50%;
@@ -85,11 +82,8 @@
   }
 
   .etc {
-    align-items: center;
+    @include flex-ccc;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     padding-left: 1em;
     width: 50%;
 
@@ -101,10 +95,7 @@
 }
 
 .end {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  @include flex-ccc;
 
   p {
     margin: 0 0 1rem;
@@ -114,4 +105,20 @@
     font-size: 1.25em;
     font-weight: bold;
   }
+}
+
+.trophies {
+  @include flex-ccc;
+
+  table {
+    margin-bottom: 1em;
+  }
+}
+
+.statistics {
+  @include flex-ccc;
+}
+
+.leaderboard {
+  @include flex-ccc;
 }

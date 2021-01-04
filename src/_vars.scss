@@ -1,2 +1,9 @@
 $theme-color: #71a871;
 $secondary-color: #889;
+
+@mixin flex-ccc {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
