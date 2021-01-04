@@ -99,10 +99,10 @@ class Main extends React.Component {
       level: null,
       timeLeft: null,
       totTime: null,
-      grid: [],
       words: null,
       trophies: null,
       grid: null,
+      hiscores: null,
     };
 
     // FOR DEBUGGING ONLY
@@ -140,6 +140,7 @@ class Main extends React.Component {
 
       this.requestGetUpdate();
       if (SERVER_TEST) {
+        this.requestGetHiscores(0);
         this.requestStart(0);
       }
 
@@ -172,10 +173,17 @@ class Main extends React.Component {
   handleWsMessage = (msg) => {
     const msg_type = msg["type"];
     const handlers = {
-      full: this.handleFullUpdate,
-      grade: this.handleGrade,
+      "full": this.handleFullUpdate,
+      "grade": this.handleGrade,
+      "hiscores": this.handleHiscores,
     };
     handlers[msg_type](msg);
+  };
+  requestGetHiscores = (level) => {
+    this.wsSend({
+      type: "getHiscores",
+      level: level,
+    })
   };
   requestStart = (level) => {
     this.wsSend({
@@ -284,6 +292,11 @@ class Main extends React.Component {
       msg["grade"]
     ]();
   };
+  handleHiscores = (hiscores) => {
+    this.setState(produce(state => {
+      state.hiscores = hiscores;
+    }));
+  }
   handleSelectLevel = (level) => {
     if (OFFLINE_MODE) {
       this.setState(produce(state => {
