@@ -16,18 +16,48 @@ if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
 }
 
+function copyIfExists(state, msg, prop) {
+  if (prop in msg) {
+    state[prop] = msg[prop];
+  }
+}
+
+function mergeWords(state, msg) {
+  if ('words' in msg) {
+    for (const word of msg['words']) {
+      if (!state.words.includes(word)) {
+        state.words.push(word);
+      }
+    }
+  }
+}
+
+function mergeTrophies(state, msg) {
+  // TODO
+}
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
+
     this.ws = null;
+    this.stopTimer = null;
 
     // counter used for synchronization, see server code
     this.numGames = 0;
 
     this.state = {
+      connected: false,
       navigation: "mainmenu",
+      running: false,
+      maxLevel: 0,
+      level: null,
       timeLeft: null,
+      words: null,
     };
+
+    // FOR DEBUGGING ONLY
+    window.main = this;
   }
   componentDidMount() {
     this.initWs();
@@ -49,10 +79,7 @@ class Main extends React.Component {
       });
 
       // TESTING
-      this.wsSend({
-        "type": "start",
-        "level": 1,
-      });
+      this.requestStart(0);
 
       this.handleWsOpen();
     };
@@ -62,7 +89,6 @@ class Main extends React.Component {
       this.handleWsMessage(data);
     };
     this.ws.onclose = (e) => {
-      this.ws = null;
       this.handleWsClose();
       this.initWs();
     };
@@ -74,9 +100,70 @@ class Main extends React.Component {
   }
   handleWsOpen() {}
   handleWsClose() {
-    // transition to "connecting" state
+    this.numGames = 0;
+    this.setState(produce(this.state, state => {
+      state.connected = false;
+    }));
   }
-  handleWsMessage(msg) {}
+  handleWsMessage(msg) {
+    const msg_type = msg['type'];
+    const handlers = {
+      'full': this.handleFullUpdate.bind(this),
+    };
+    handlers[msg_type](msg);
+  }
+  requestStart(level) {
+    this.wsSend({
+      "type": "start",
+      "level": level,
+    });
+  }
+  requestStop() {
+    this.wsSend({
+      "type": "stop",
+      "numGames": this.numGames,
+    });
+  }
+  requestWord(word) {
+    this.wsSend({
+      "type": "word",
+      "numGames": this.numGames,
+      "word": word,
+    });
+  }
+  checkNumGames(msg) {
+    const numGamesServer = msg['numGames'];
+    if (numGamesServer < this.numGames) {
+      console.log('numGames check failed');
+      return false;
+    }
+    this.numGames = numGamesServer;
+    return true;
+  }
+  updateTimeLeft(msg) {
+    if (!('timeLeft' in msg)) {
+      return;
+    }
+    if (this.stopTimer != null) {
+      clearTimeout(this.stopTimer);
+    }
+    this.stopTimer = setTimeout(this.requestStop.bind(this), msg['timeLeft']);
+  }
+  handleFullUpdate(msg) {
+    if (!this.checkNumGames(msg)) {
+      return;
+    }
+    this.setState(produce(state => {
+      state.connected = true;
+      copyIfExists(state, msg, 'maxLevel');
+      copyIfExists(state, msg, 'running');
+      copyIfExists(state, msg, 'level');
+      copyIfExists(state, msg, 'timeLeft');
+      mergeWords(state, msg);
+      mergeTrophies(state, msg);
+    }));
+    this.updateTimeLeft(msg);
+  }
   navigate(target) {
     this.setState(produce(state => {
       state.navigation = target;
