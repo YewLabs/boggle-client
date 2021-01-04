@@ -1,5 +1,7 @@
 import produce from "immer";
 
+import Grid from "./grid.jsx";
+
 export default class Level extends React.Component {
   constructor(props) {
     super(props);
@@ -42,9 +44,7 @@ export default class Level extends React.Component {
             Words: {this.state.words.length} of {this.state.totalWords}
           </span>
         </div>
-        <div className="grid">
-          <img src="./static/level4.png" />
-        </div>
+        <Grid level={this.props.level.slice(-1)} />
         <div className="inputs">
           <div className="words">
             {this.state.words.map((w) => (

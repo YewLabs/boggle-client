@@ -8,6 +8,7 @@ $secondary-color: #888;
     background-color: $theme-color;
     border-radius: 4px;
     border: none;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4), 0px 2px 2px rgba(0, 0, 0, 0.2);
     color: #fff;
     cursor: pointer;
     font: inherit;
@@ -116,10 +117,70 @@ $secondary-color: #888;
 
   .grid {
     display: flex;
+    position: relative;
 
     img {
-      height: 100%;
-      margin: 0 auto;
+      height: 550px;
+      position: relative;
+    }
+
+    .letter {
+      align-items: center;
+      background-color: #000;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      height: 2em;
+      justify-content: center;
+      position: absolute;
+      user-select: none;
+      width: 2em;
+
+      &.selected {
+        background-color: #999;
+      }
+    }
+  }
+
+  .level1 {
+    img {
+      top: 100px;
+      left: 80px;
+    }
+
+    .letters {
+      transform: scale(1.9) translate(-363px, 75px);
+    }
+  }
+  .level2 {
+    img {
+      top: 90px;
+      left: 40px;
+    }
+
+    .letters {
+      transform: none;
+    }
+  }
+  .level3 {
+    img {
+      top: 30px;
+      left: 20px;
+    }
+
+    .letters {
+      transform: none;
+    }
+  }
+  .level4 {
+    img {
+      top: 30px;
+      left: 110px;
+    }
+
+    .letters {
+      transform: none;
     }
   }
 
@@ -145,8 +206,38 @@ $secondary-color: #888;
       display: flex;
 
       input {
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5),
+          0px 2px 4px rgba(0, 0, 0, 0.3);
         width: 100%;
+
+        &.shaking {
+          animation: shake 1s;
+        }
       }
     }
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  16% {
+    transform: translate(-25px, 0);
+  }
+  32% {
+    transform: translate(25px, 0);
+  }
+  48% {
+    transform: translate(-10px, 0);
+  }
+  64% {
+    transform: translate(10px, 0);
+  }
+  80% {
+    transform: translate(-5px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
   }
 }
