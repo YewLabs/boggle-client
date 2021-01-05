@@ -25,7 +25,7 @@ const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
   : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
-const TICK_INTERVAL = 1000; // in ms, make larger if performance suffers
+const TICK_INTERVAL = 100; // in ms, make larger if performance suffers
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
@@ -112,6 +112,8 @@ class Main extends React.Component {
       totNumWords: null,
       level: null,
       timeLeft: null,
+      timeLeftCheckpoint: null,
+      renderedTimeLeft: null,
       totTime: null,
       words: null,
       trophies: null,
@@ -144,6 +146,8 @@ class Main extends React.Component {
           state.maxLevel = 3;
           state.running = false;
           state.timeLeft = 300 * 1000;
+          state.timeLeftCheckpoint = new Date();
+          state.renderedTimeLeft = 300 * 1000;
           state.totTime = 300 * 1000;
           state.trophies = "????????????????";
         })
@@ -263,7 +267,7 @@ class Main extends React.Component {
     this.stopTimer = setTimeout(this.requestStop, msg["timeLeft"]);
     this.timerInterval = setInterval(() => {
       this.setState(produce(state => {
-        state.timeLeft -= TICK_INTERVAL;
+        state.renderedTimeLeft = state.timeLeft - (new Date().getTime() - state.timeLeftCheckpoint.getTime());
       }))
     }, TICK_INTERVAL);
   };
@@ -291,6 +295,10 @@ class Main extends React.Component {
       copyIfExists(state, msg, "running");
       copyIfExists(state, msg, "level");
       copyIfExists(state, msg, "timeLeft");
+      if ("timeLeft" in msg) {
+        state.timeLeftCheckpoint = new Date();
+        state.renderedTimeLeft = msg["timeLeft"];
+      }
       copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
       copyIfExists(state, msg, "grid");
@@ -331,6 +339,18 @@ class Main extends React.Component {
     );
   };
   setWordResponse(state, word, response) {
+    const fulfilled = () =>
+      this.setState(
+        produce((state) => {
+          state.wordResponses = state.wordResponses.filter((x) => x.word !== word);
+        })
+      );
+    state.wordResponses.push({
+      word,
+      fulfilled,
+      response,
+    });
+
     const oldResponse = (word in state.wordResponsesD) ? state.wordResponsesD[word] : null;
     const response0 = `${response}0`;
     const response1 = `${response}1`;
@@ -348,18 +368,6 @@ class Main extends React.Component {
         }));
       });
     }
-
-    const fulfilled = () =>
-      this.setState(
-        produce((state) => {
-          state.wordResponses = state.wordResponses.filter((x) => x.word !== word);
-        })
-      );
-    state.wordResponses.push({
-      word,
-      fulfilled,
-      response,
-    });
   }
   handleHiscores = (msg) => {
     this.setState(produce(state => {
@@ -429,7 +437,7 @@ class Main extends React.Component {
           grid={this.state.grid}
           bonuses={this.state.bonuses}
           level={`level${this.state.level + 1}`}
-          timeleft={this.state.timeLeft}
+          timeleft={this.state.renderedTimeLeft}
           tottime={this.state.totTime}
           totwords={this.state.totNumWords}
           score={this.state.score}
