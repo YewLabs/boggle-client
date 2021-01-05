@@ -117,6 +117,9 @@ class Main extends React.Component {
       hiscores: null,
       blanks: null,
       allWords: null,
+      stats: null,
+      // this copy of numGames is for stats display
+      numGames: null,
     };
 
     // FOR DEBUGGING ONLY
@@ -286,6 +289,8 @@ class Main extends React.Component {
       copyIfExists(state, msg, "special");
       copyIfExists(state, msg, "blanks");
       copyIfExists(state, msg, "allWords");
+      copyIfExists(state, msg, "stats");
+      copyIfExists(state, msg, "numGames");
       mergeScore(state, msg);
       mergeWords(state, msg);
       mergeRoundTrophies(state, msg);
@@ -383,7 +388,7 @@ class Main extends React.Component {
     const onselectlevel = (level) => (e) => this.handleSelectLevel(level);
 
     if (!this.state.connected) {
-      return <div class="msg">Connecting...</div>;
+      return <div className="msg">Connecting...</div>;
     }
     if (this.state.running) {
       return (
@@ -415,7 +420,7 @@ class Main extends React.Component {
           />
         );
       case "statistics":
-        return <Statistics navigate={navigate} />;
+        return <Statistics navigate={navigate} stats={this.state.stats} numgames={this.numGames} />;
       case "leaderboard":
         return <Leaderboard navigate={navigate} hiscores={this.state.hiscores} onlevel={this.handleChangeLeaderboardLevel} maxlevel={this.state.maxLevel} />;
       case "end":

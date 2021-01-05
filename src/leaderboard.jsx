@@ -13,7 +13,7 @@ export default class Leaderboard extends React.Component {
         contents.push(
           <tr key={entry[0]}>
             <td>{entry[0]}</td>
-            <td>{(entry[1] / HISCORE_SCALE) * 100}%</td>
+            <td>{((entry[1] / HISCORE_SCALE) * 100).toFixed(2)}%</td>
           </tr>
         );
       }
