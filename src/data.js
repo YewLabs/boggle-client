@@ -111,28 +111,28 @@ export const adjacent = [
 
 export const trophyDescriptions = [
   [
-    "get 50% words in level 1",
-    "get 50% points in level 1",
-    "find a longest word in level 1",
-    "find a special word in level 1",
+    "Get 20% words in level 1",
+    "Get 20% points in level 1",
+    "Find a longest word in level 1",
+    "Find a special word in level 1",
   ],
   [
-    "get 50% words in level 2",
-    "get 50% points in level 2",
-    "find a longest word in level 2",
-    "find a special word in level 2",
+    "Get 20% words in level 2",
+    "Get 20% points in level 2",
+    "Find a longest word in level 2",
+    "Find a special word in level 2",
   ],
   [
-    "get 50% words in level 3",
-    "get 50% points in level 3",
-    "find a longest word in level 3",
-    "find a special word in level 3",
+    "Get 20% words in level 3",
+    "Get 20% points in level 3",
+    "Find a longest word in level 3",
+    "Find a special word in level 3",
   ],
   [
-    "get 50% words in level 4",
-    "get 50% points in level 4",
-    "find a longest word in level 4",
-    "find a special word in level 4",
+    "Get 20% words in level 4",
+    "Get 20% points in level 4",
+    "Find a longest word in level 4",
+    "Find a special word in level 4",
   ],
 ];
 
