@@ -108,6 +108,7 @@ export default class Level extends React.Component {
         </div>
         <Grid
           grid={this.props.grid}
+          bonuses={this.props.bonuses}
           level={this.props.level.slice(-1)}
           submit={this.props.onword}
           wordresponses={this.props.wordresponses}

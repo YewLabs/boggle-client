@@ -25,6 +25,18 @@
     &:hover {
       background-color: $secondary-color;
     }
+    &.bonus-2 {
+      background-color: $bonus2-color;
+      &:hover {
+        background-color: lighten($bonus2-color, 20%);
+      }
+    }
+    &.bonus-3 {
+      background-color: $bonus3-color;
+      &:hover {
+        background-color: lighten($bonus3-color, 20%);
+      }
+    }
     &.selected {
       // background-color: desaturate(darken($theme-color, 10%), 10%);
       background-color: #558b2f;

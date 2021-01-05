@@ -69,6 +69,7 @@ export default class End extends React.Component {
         </div>
         <Grid
           grid={this.props.grid}
+          bonuses={this.props.bonuses}
           level={this.props.level + 1}
           disabled={true}
         />

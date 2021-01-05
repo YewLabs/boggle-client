@@ -113,6 +113,7 @@ class Main extends React.Component {
       words: null,
       trophies: null,
       grid: null,
+      bonuses: null,
       wordResponses: [],
       hiscores: null,
       blanks: null,
@@ -286,6 +287,7 @@ class Main extends React.Component {
       copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
       copyIfExists(state, msg, "grid");
+      copyIfExists(state, msg, "bonuses");
       copyIfExists(state, msg, "special");
       copyIfExists(state, msg, "blanks");
       copyIfExists(state, msg, "allWords");
@@ -394,6 +396,7 @@ class Main extends React.Component {
       return (
         <Level
           grid={this.state.grid}
+          bonuses={this.state.bonuses}
           level={`level${this.state.level + 1}`}
           timeleft={this.state.timeLeft}
           tottime={this.state.totTime}
@@ -427,6 +430,7 @@ class Main extends React.Component {
         return (
           <End
             grid={this.state.grid}
+            bonuses={this.state.bonuses}
             level={this.state.level}
             navigate={navigate}
             roundtrophies={this.state.roundTrophies}

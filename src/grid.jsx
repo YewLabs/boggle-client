@@ -73,6 +73,15 @@ export default class Grid extends React.Component {
     );
   };
 
+  bonus = (x, y, z) => {
+    for (let i = 0; i < this.props.bonuses.length; i++) {
+      const [coords, bonus] = this.props.bonuses[i];
+      if (coords[0] === x && coords[1] === y && coords?.[2] === z) {
+        return bonus;
+      }
+    }
+  };
+
   render() {
     let responses = {};
     let callbacks = {};
@@ -88,24 +97,32 @@ export default class Grid extends React.Component {
       }
     });
 
-    const circs = data[this.props.level - 1].map(({ x, y, z, cx, cy }, i) => (
-      <div
-        className={`letter
+    const circs = data[this.props.level - 1].map(({ x, y, z, cx, cy }, i) => {
+      const bonus = this.bonus(x, y, z);
+      return (
+        <div
+          className={`letter
+          ${bonus ? `bonus-${bonus}` : ""}
           ${this.state.selected.includes(i) ? "selected" : ""}
           ${this.state.selected.slice(-1)[0] === i ? "last" : ""}
           ${responses[i] ?? ""}
         `}
-        key={i}
-        onMouseDown={(e) => this.props.disabled || this.mouseDown(i, { x, y, z })}
-        onMouseMove={(e) => this.props.disabled || this.mouseMove(i, { x, y, z })}
-        onAnimationEnd={(e) => callbacks?.[i]?.()}
-        style={{ left: cx, top: cy }}
-      >
-        {z === undefined
-          ? this.props.grid[x][y].toUpperCase()
-          : this.props.grid[x][y][z].toUpperCase()}
-      </div>
-    ));
+          key={i}
+          onMouseDown={(e) =>
+            this.props.disabled || this.mouseDown(i, { x, y, z })
+          }
+          onMouseMove={(e) =>
+            this.props.disabled || this.mouseMove(i, { x, y, z })
+          }
+          onAnimationEnd={(e) => callbacks?.[i]?.()}
+          style={{ left: cx, top: cy }}
+        >
+          {z === undefined
+            ? this.props.grid[x][y].toUpperCase()
+            : this.props.grid[x][y][z].toUpperCase()}
+        </div>
+      );
+    });
 
     return (
       <div className={`grid level${this.props.level}`}>
