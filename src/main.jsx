@@ -25,7 +25,7 @@ const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
   : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
 
-const TICK_INTERVAL = 1000 / 10; // in ms, make larger if performance suffers
+const TICK_INTERVAL = 1000; // in ms, make larger if performance suffers
 
 if (OFFLINE_MODE) {
   console.log("WARNING: offline mode");
@@ -438,7 +438,7 @@ class Main extends React.Component {
           />
         );
       default:
-        return <div class="msg">Loading...</div>;
+        return <div className="msg">Loading...</div>;
     }
   }
 }

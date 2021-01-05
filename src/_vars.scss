@@ -18,29 +18,45 @@ $correct-color: #4caf50;
   }
 }
 
+@keyframes fadeduplicate {
+  0% {
+    color: $duplicate-color;
+    text-shadow: 0 0 5px $duplicate-color;
+  }
+}
+
 @keyframes wrong {
-  5% {
+  10% {
     background-color: $wrong-color;
   }
-  15% {
+  30% {
     background-color: $wrong-color;
   }
 }
 
 @keyframes duplicate {
-  5% {
+  10% {
     background-color: $duplicate-color;
   }
-  15% {
+  30% {
     background-color: $duplicate-color;
   }
 }
 
 @keyframes correct {
-  5% {
+  10% {
     background-color: $correct-color;
   }
-  15% {
+  30% {
     background-color: $correct-color;
+  }
+}
+
+@keyframes shake {
+  25% {
+    transform: translate(-15px, 0);
+  }
+  75% {
+    transform: translate(15px, 0);
   }
 }

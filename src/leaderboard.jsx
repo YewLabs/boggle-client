@@ -28,7 +28,7 @@ export default class Leaderboard extends React.Component {
               this.props.onlevel(i);
             }}
           >
-            {i + 1}
+            Level {i + 1}
           </button>
         );
       }

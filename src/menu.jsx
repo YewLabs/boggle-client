@@ -27,7 +27,7 @@ export default class Menu extends React.Component {
           onClick={this.props.onselectlevel(i)}
           disabled={i > this.props.maxlevel}
         >
-          {i + 1}
+          Level {i + 1}
         </button>
       );
     }

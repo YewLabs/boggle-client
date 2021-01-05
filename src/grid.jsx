@@ -13,7 +13,6 @@ export default class Grid extends React.Component {
       last: {},
     };
     this.lettersOf = {};
-    this.globalFulfilled = false;
   }
 
   componentDidMount() {
@@ -77,8 +76,6 @@ export default class Grid extends React.Component {
   render() {
     let responses = {};
     let callbacks = {};
-    let globalResponse = "";
-    let globalCallback = () => {};
     this.props.wordresponses?.forEach(({ word, response, fulfilled }) => {
       if (word in this.lettersOf) {
         this.lettersOf[word].forEach((i) => {
@@ -88,14 +85,6 @@ export default class Grid extends React.Component {
             fulfilled();
           };
         });
-      } else {
-        globalResponse = response;
-        this.globalFulfilled = false;
-        globalCallback = () => {
-          if (this.globalFulfilled) return;
-          fulfilled();
-          this.globalFulfilled = true;
-        };
       }
     });
 
@@ -104,13 +93,12 @@ export default class Grid extends React.Component {
         className={`letter
           ${this.state.selected.includes(i) ? "selected" : ""}
           ${this.state.selected.slice(-1)[0] === i ? "last" : ""}
-          ${globalResponse}
           ${responses[i] ?? ""}
         `}
         key={i}
         onMouseDown={(e) => this.props.disabled || this.mouseDown(i, { x, y, z })}
         onMouseMove={(e) => this.props.disabled || this.mouseMove(i, { x, y, z })}
-        onAnimationEnd={(e) => callbacks?.[i]?.() || globalCallback()}
+        onAnimationEnd={(e) => callbacks?.[i]?.()}
         style={{ left: cx, top: cy }}
       >
         {z === undefined
