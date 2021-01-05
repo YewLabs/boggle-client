@@ -28,10 +28,10 @@ export default class End extends React.Component {
         trophies.push(desc);
       })
     );
-    const foundWords = new Set(this.props.words.map(([w, sc]) => w));
+    const foundWords = new Set(this.props.words?.map(([w, sc]) => w));
     const renderWords = this.state.trophies ? (
       <div className="trophies">
-        {trophies.map((desc, i) => (
+        {trophies?.map((desc, i) => (
           <div className="entry">
           <div className="trophy" key={i}>
             <div className="stand"></div>
@@ -42,7 +42,7 @@ export default class End extends React.Component {
         ))}
       </div>
     ) : (
-      this.props.allwords.map((w, i) => {
+      this.props.allwords?.map((w, i) => {
         const isSpecial =
           this.props.special != null && w[0] == this.props.special;
         const isFound = foundWords.has(w[0]);
