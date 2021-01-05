@@ -31,9 +31,9 @@ export default class End extends React.Component {
     const foundWords = new Set(this.props.words?.map(([w, sc]) => w));
     const renderWords = this.state.trophies ? (
       <div className="trophies">
-        {trophies?.map((desc, i) => (
-          <div className="entry">
-          <div className="trophy" key={i}>
+        {trophies.map((desc, i) => (
+          <div className="entry" key={i}>
+          <div className="trophy">
             <div className="stand"></div>
             <img src="./static/trophy.svg" draggable="false" />
           </div>
