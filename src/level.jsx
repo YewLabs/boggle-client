@@ -125,10 +125,8 @@ export default class Level extends React.Component {
                   className={
                     isSpecial
                       ? "special"
-                      : w[0] === repeatedWord
-                      ? "duplicate"
-                      : w[0] === correctWord
-                      ? "correct"
+                      : (w[0] in this.props.wordresponsesd)
+                      ? this.props.wordresponsesd[w[0]]
                       : ""
                   }
                   onAnimationEnd={(e) => wordCallback?.()}

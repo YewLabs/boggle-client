@@ -41,6 +41,7 @@ const copyIfExists = (state, msg, prop) => {
 };
 
 const mergeWords = (state, msg) => {
+  let newWords = [];
   if ("words" in msg) {
     if (state.words == null) {
       state.words = msg["words"];
@@ -49,11 +50,13 @@ const mergeWords = (state, msg) => {
       for (const w of msg["words"]) {
         if (!state.words.some((ow) => w[0] == ow[0])) {
           state.words.push(w);
+          newWords.push(w);
         }
       }
     }
     state.words.sort();
   }
+  return newWords;
 };
 
 const mergeScore = (state, msg) => {
@@ -114,7 +117,10 @@ class Main extends React.Component {
       trophies: null,
       grid: null,
       bonuses: null,
+      // used for the flashing animation in the grid
       wordResponses: [],
+      // used for the flashing animation in the word list
+      wordResponsesD: {},
       hiscores: null,
       blanks: null,
       allWords: null,
@@ -278,6 +284,7 @@ class Main extends React.Component {
         state.special = null;
         state.roundTrophies = 0;
         state.allWords = null;
+        state.wordResponsesD = {};
       }
       state.connected = true;
       copyIfExists(state, msg, "maxLevel");
@@ -294,9 +301,12 @@ class Main extends React.Component {
       copyIfExists(state, msg, "stats");
       copyIfExists(state, msg, "numGames");
       mergeScore(state, msg);
-      mergeWords(state, msg);
       mergeRoundTrophies(state, msg);
       mergeTrophies(state, msg);
+      const newWords = mergeWords(state, msg);
+      for (const newWord of newWords) {
+        this.setWordResponse(state, newWord[0], "correct");
+      }
       if (state.allWords !== null) {
         state.allWords.sort();
       }
@@ -314,22 +324,43 @@ class Main extends React.Component {
   handleGrade = (msg) => {
     const response = ["wrong", "duplicate", "correct"][msg["grade"]];
     const word = msg["word"];
+    this.setState(
+      produce((state) => {
+        this.setWordResponse(state, word, response);
+      })
+    );
+  };
+  setWordResponse(state, word, response) {
+    const oldResponse = (word in state.wordResponsesD) ? state.wordResponsesD[word] : null;
+    const response0 = `${response}0`;
+    const response1 = `${response}1`;
+    if (oldResponse == null || (oldResponse != response0 && oldResponse != response1)) {
+      state.wordResponsesD[word] = response0;
+      return;
+    }
+    if (oldResponse == response0) {
+      state.wordResponsesD[word] = response1;
+      requestAnimationFrame(() => {
+        this.setState(produce((state) => {
+          if (word in state.wordResponsesD && state.wordResponsesD[word] == response1) {
+            state.wordResponsesD[word] = response0;
+          }
+        }));
+      });
+    }
+
     const fulfilled = () =>
       this.setState(
         produce((state) => {
           state.wordResponses = state.wordResponses.filter((x) => x.word !== word);
         })
       );
-    this.setState(
-      produce((state) => {
-        state.wordResponses.push({
-          word,
-          fulfilled,
-          response,
-        });
-      })
-    );
-  };
+    state.wordResponses.push({
+      word,
+      fulfilled,
+      response,
+    });
+  }
   handleHiscores = (msg) => {
     this.setState(produce(state => {
       state.hiscores = msg['hiscores'];
@@ -405,6 +436,7 @@ class Main extends React.Component {
           words={this.state.words}
           special={this.state.special}
           wordresponses={this.state.wordResponses}
+          wordresponsesd={this.state.wordResponsesD}
           onword={this.handleWord}
           onquit={this.handleQuit}
         />
