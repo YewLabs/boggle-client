@@ -157,14 +157,18 @@ class Main extends React.Component {
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
     this.ws.onopen = (e) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (!urlParams.has("token")) {
-        // TODO: change this when we migrate to real hunt website
-        window.location.href = "../";
+      // Note: this path should no longer be used
+      if (!("token" in window)) {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.has("token")) {
+          window.location.href = "../";
+        }
+        window.token = urlParams.get("token");
       }
+
       this.wsSend({
         type: "AUTH",
-        data: urlParams.get("token"),
+        data: window.token,
       });
 
       this.requestGetUpdate();

@@ -23,17 +23,27 @@ export default class Statistics extends React.Component {
         <button onClick={this.props.navigate("mainmenu")}>
           Return to menu
         </button>
-        <div>
-          Number of games played: { this.props.numgames }
+        <div style={{
+          marginTop: "20px",
+          textAlign: "center",
+        }}>
+          <div>
+            Number of games played: { this.props.numgames }
+          </div>
+          <div>
+            Total words found: { this.props.stats.tot_words }
+          </div>
+          <div style={{
+            marginTop: "10px",
+            marginBottom: "10px",
+          }}>
+            { levelStatsDom }
+          </div>
+          <div>
+            Highest scoring words:
+          </div>
+          { highestScoringWordsDom }
         </div>
-        <div>
-          Total words found: { this.props.stats.tot_words }
-        </div>
-        { levelStatsDom }
-        <div>
-          Highest scoring words:
-        </div>
-        { highestScoringWordsDom }
       </div>
     );
   }
