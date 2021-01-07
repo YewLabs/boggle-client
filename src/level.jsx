@@ -7,8 +7,8 @@ import "./level.scss";
 const BarTimer = ({ timeleft, tottime }) => {
   const width = Math.max((100 * timeleft) / tottime, 0);
   const totSeconds = Math.floor(timeleft / 1000);
-  const minutes = Math.floor(totSeconds / 60);
-  const seconds = totSeconds - minutes * 60;
+  const minutes = Math.max(0, Math.floor(totSeconds / 60));
+  const seconds = Math.max(0, totSeconds - minutes * 60);
 
   return (
     <div className="bartimer" style={{ width: `${width}%` }}>
@@ -91,8 +91,11 @@ export default class Level extends React.Component {
     return (
       <div className="level">
         <div className="toolbar">
-          <button className="gray" onClick={this.props.onquit}>
-            Quit
+          <button className="gray stop" onClick={this.props.onquit}>
+            Stop
+            <div className="message">
+            This will stop the game for everyone.
+            </div>
           </button>
           <div className="timerwrapper">
             <BarTimer
@@ -101,9 +104,8 @@ export default class Level extends React.Component {
             />
           </div>
           <span className="score">
+            Level {this.props.level.slice(-1)} · Score: {this.props.score}<br/>
             Words: {this.props.words.length} of {this.props.totwords}
-            <br />
-            Score: {this.props.score}
           </span>
         </div>
         <Grid

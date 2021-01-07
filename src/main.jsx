@@ -9,8 +9,8 @@ import { sampleBoard } from "./data";
 
 import "./main.scss";
 
-// const OFFLINE_MODE = window.location.host == "localhost:8080";
-const OFFLINE_MODE = false;
+const OFFLINE_MODE = window.location.host == "localhost:8080";
+// const OFFLINE_MODE = false;
 const urlParams = new URLSearchParams(window.location.search);
 // TODO: make sure these are eventually false
 const FAKE_SERVER_MODE = new URLSearchParams(window.location.search).has(

@@ -2,6 +2,7 @@
 
 .puzzle {
   font-size: 20px;
+  margin-bottom: 10em;
 
   button {
     background-color: $theme-color;
@@ -61,12 +62,17 @@
 .menu {
   display: grid;
   grid-template-areas:
+    "instructions instructions"
     "play trophies"
     "statistics description"
     "leaderboard blanks";
-  grid-template-rows: 4fr 2em 2em;
+  grid-template-rows: 2.5em 4fr 2em 2em;
   grid-template-columns: 1fr 4fr;
   gap: 1rem;
+
+  .instructions {
+    grid-area: instructions;
+  }
 
   .label-play,
   .label-trophies {
@@ -169,6 +175,21 @@
       position: absolute;
       top: 20px;
       z-index: 2;
+    }
+
+    &.highlighted {
+      img {
+        background-color: rgba($duplicate-color, 0.5);
+        box-shadow: 0px 0px 5px rgba($duplicate-color, 0.5);
+      }
+
+      .stand {
+        box-shadow: 0px 0px 5px $duplicate-color;
+      }
+
+      .letter {
+        text-shadow: 0px 0px 5px $duplicate-color;
+      }
     }
   }
 }

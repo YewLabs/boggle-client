@@ -74,7 +74,7 @@ export default class Grid extends React.Component {
   };
 
   bonus = (x, y, z) => {
-    for (let i = 0; i < this.props.bonuses.length; i++) {
+    for (let i = 0; i < this.props.bonuses?.length; i++) {
       const [coords, bonus] = this.props.bonuses[i];
       if (coords[0] === x && coords[1] === y && coords?.[2] === z) {
         return bonus;

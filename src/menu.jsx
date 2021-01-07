@@ -7,6 +7,7 @@ export default class Menu extends React.Component {
     super(props);
     this.state = {
       description: "",
+      selected: null,
     };
   }
 
@@ -14,6 +15,7 @@ export default class Menu extends React.Component {
     this.setState(
       produce((state) => {
         state.description = trophyDescriptions[i][j];
+        state.selected = { i, j };
       })
     );
   };
@@ -33,6 +35,8 @@ export default class Menu extends React.Component {
     }
     return (
       <div className="menu">
+        <div className="instructions">
+        Find words along the given paths, without reusing letter spaces. Blue letters apply a double point bonus, and red letters give a triple point bonus. These bonuses stack multiplicatively. Have fun!</div>
         <div className="play">{buttons}</div>
         <div className="trophies">
           {[0, 1, 2, 3].map((i) =>
@@ -40,7 +44,15 @@ export default class Menu extends React.Component {
               const letter = this.props.trophies[4 * i + j];
               return (
                 <div
-                  className="trophy"
+                  className={`
+                    trophy
+                    ${
+                      this.state.selected?.i === i &&
+                      this.state.selected?.j === j
+                        ? "highlighted"
+                        : ""
+                    }
+                  `}
                   key={`${i}-${j}`}
                   onMouseOver={(e) => this.setDescription(i, j)}
                 >
