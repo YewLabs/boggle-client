@@ -136,7 +136,7 @@ export default class Level extends React.Component {
                   <span
                     className={`
                     score
-                    ${w[1].toString().length > 3 ? "small" : ""}
+                    ${w[1] > 999 ? "small" : ""}
                     `}
                   >
                     {w[1]}
