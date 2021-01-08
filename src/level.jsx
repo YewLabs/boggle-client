@@ -60,7 +60,7 @@ export default class Level extends React.Component {
     );
   };
 
-  percentOf = (n, tot) => `${Math.round((100 * n) / tot)}%`;
+  percentOf = (n, tot) => `${Math.floor((100 * n) / tot)}%`;
 
   render() {
     let inputClassName = "";
