@@ -131,6 +131,8 @@ export default class Level extends React.Component {
                       ? this.props.wordresponsesd[w[0]]
                       : ""
                   }
+                  onAnimationStart={(e) => e.target.scrollIntoView({
+                    behavior: "smooth", block: "nearest", inline: "nearest"})}
                   onAnimationEnd={(e) => wordCallback?.()}
                 >
                   <span

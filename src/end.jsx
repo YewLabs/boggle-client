@@ -24,7 +24,7 @@ export default class End extends React.Component {
     let trophies = [];
     trophyDescriptions.forEach((li, i) =>
       li.forEach((desc, j) => {
-        if ((this.props.roundtrophies & 1 << (4 * i + j)) === 0) return;
+        if ((this.props.roundtrophies & (1 << (4 * i + j))) === 0) return;
         trophies.push(desc);
       })
     );
@@ -33,11 +33,11 @@ export default class End extends React.Component {
       <div className="trophies">
         {trophies.map((desc, i) => (
           <div className="entry" key={i}>
-          <div className="trophy">
-            <div className="stand"></div>
-            <img src="./static/trophy.svg" draggable="false" />
-          </div>
-          <span className="description">{desc}</span>
+            <div className="trophy">
+              <div className="stand"></div>
+              <img src="./static/trophy.svg" draggable="false" />
+            </div>
+            <span className="description">{desc}</span>
           </div>
         ))}
       </div>
@@ -54,7 +54,15 @@ export default class End extends React.Component {
                   ${isFound ? "found" : "unfound"}
                 `}
           >
-            <span className="score">{w[1]}</span> {w[0]}
+            <span
+              className={`
+              score
+              ${w[1] > 999 ? "small" : ""}
+              `}
+            >
+              {w[1]}
+            </span>{" "}
+            {w[0]}
           </span>
         );
       })
