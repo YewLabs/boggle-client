@@ -123,6 +123,12 @@
         &.wrong {
           animation: shake 0.2s;
         }
+        &.correct {
+          animation: fadein 0.2s;
+        }
+        &.duplicate {
+          animation: fadeduplicate 0.2s;
+        }
       }
     }
   }

@@ -79,9 +79,11 @@ export default class Level extends React.Component {
           inputClassName = "wrong";
           inputCallback = callback;
         } else if (response === "duplicate") {
+          inputClassName = "duplicate";
           repeatedWord = word;
           wordCallback = callback;
         } else {
+          inputClassName = "correct";
           correctWord = word;
           wordCallback = callback;
         }
