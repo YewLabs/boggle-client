@@ -6,7 +6,7 @@ export default class Leaderboard extends React.Component {
   }
 
   render() {
-    let contents = <div>Loading...</div>;
+    let contents = <tr><td>Loading...</td></tr>;
     if (this.props.hiscores != null) {
       contents = [];
       for (const entry of this.props.hiscores) {
@@ -37,11 +37,13 @@ export default class Leaderboard extends React.Component {
       <div className="leaderboard">
         <div className="levels">{buttons}</div>
         <table>
-          <tr>
-            <th>Team</th>
-            <th>Percent max</th>
-          </tr>
-          {contents}
+          <tbody>
+            <tr>
+              <th>Team</th>
+              <th>Percent max</th>
+            </tr>
+            {contents}
+          </tbody>
         </table>
         <button onClick={this.props.navigate("mainmenu")}>
           Return to menu
