@@ -115,6 +115,7 @@ class Main extends React.Component {
       timeLeftCheckpoint: null,
       renderedTimeLeft: null,
       totTime: null,
+      maxScore: null,
       words: null,
       trophies: null,
       grid: null,
@@ -305,6 +306,7 @@ class Main extends React.Component {
       }
       copyIfExists(state, msg, "totTime");
       copyIfExists(state, msg, "totNumWords");
+      copyIfExists(state, msg, "maxScore");
       copyIfExists(state, msg, "grid");
       copyIfExists(state, msg, "bonuses");
       copyIfExists(state, msg, "special");
@@ -444,6 +446,7 @@ class Main extends React.Component {
           timeleft={this.state.renderedTimeLeft}
           tottime={this.state.totTime}
           totwords={this.state.totNumWords}
+          maxscore={this.state.maxScore}
           score={this.state.score}
           words={this.state.words}
           special={this.state.special}
@@ -479,6 +482,7 @@ class Main extends React.Component {
             navigate={navigate}
             roundtrophies={this.state.roundTrophies}
             totwords={this.state.totNumWords}
+            maxscore={this.state.maxScore}
             score={this.state.score}
             words={this.state.words}
             special={this.state.special}

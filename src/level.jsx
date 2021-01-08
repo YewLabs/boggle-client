@@ -60,6 +60,8 @@ export default class Level extends React.Component {
     );
   };
 
+  percentOf = (n, tot) => `${Math.round((100 * n) / tot)}%`;
+
   render() {
     let inputClassName = "";
     let inputCallback = () => {};
@@ -95,9 +97,7 @@ export default class Level extends React.Component {
         <div className="toolbar">
           <button className="gray stop" onClick={this.props.onquit}>
             Stop
-            <div className="message">
-            This will stop the game for everyone.
-            </div>
+            <div className="message">This will stop the game for everyone.</div>
           </button>
           <div className="timerwrapper">
             <BarTimer
@@ -106,8 +106,11 @@ export default class Level extends React.Component {
             />
           </div>
           <span className="score">
-            Level {this.props.level.slice(-1)} · Score: {this.props.score}<br/>
-            Words: {this.props.words.length} of {this.props.totwords}
+            Score: {this.props.score} (
+            {this.percentOf(this.props.score, this.props.maxscore)})
+            <br />
+            Words: {this.props.words.length} of {this.props.totwords} (
+            {this.percentOf(this.props.words.length, this.props.totwords)})
           </span>
         </div>
         <Grid
@@ -129,12 +132,17 @@ export default class Level extends React.Component {
                   className={
                     isSpecial
                       ? "special"
-                      : (w[0] in this.props.wordresponsesd)
+                      : w[0] in this.props.wordresponsesd
                       ? this.props.wordresponsesd[w[0]]
                       : ""
                   }
-                  onAnimationStart={(e) => e.target.scrollIntoView({
-                    behavior: "smooth", block: "nearest", inline: "nearest"})}
+                  onAnimationStart={(e) =>
+                    e.target.scrollIntoView({
+                      behavior: "smooth",
+                      block: "nearest",
+                      inline: "nearest",
+                    })
+                  }
                   onAnimationEnd={(e) => wordCallback?.()}
                 >
                   <span

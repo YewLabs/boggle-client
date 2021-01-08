@@ -20,6 +20,8 @@ export default class End extends React.Component {
     );
   };
 
+  percentOf = (n, tot) => `${Math.round((100 * n) / tot)}%`;
+
   render() {
     let trophies = [];
     trophyDescriptions.forEach((li, i) =>
@@ -71,8 +73,7 @@ export default class End extends React.Component {
       <div className="end level">
         <div className="toolbar">
           <p className="points">
-            You found {this.props.words.length} of {this.props.totwords} words,
-            for {this.props.score} points.
+            Level {this.props.level + 1}. You found {this.props.words.length} of {this.props.totwords} words ({this.percentOf(this.props.words.length, this.props.totwords)}), for {this.props.score} points ({this.percentOf(this.props.score, this.props.maxscore)}).
           </p>
         </div>
         <Grid
