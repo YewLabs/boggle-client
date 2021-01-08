@@ -27,6 +27,20 @@ $bonus3-color: #b71c1c;
   }
 }
 
+@keyframes inputcorrect {
+  0% {
+    color: $correct-color;
+    box-shadow: 0 0 5px $correct-color;
+  }
+}
+
+@keyframes inputduplicate {
+  0% {
+    color: $duplicate-color;
+    box-shadow: 0 0 5px $duplicate-color;
+  }
+}
+
 @keyframes wrong {
   10% {
     background-color: $wrong-color;
