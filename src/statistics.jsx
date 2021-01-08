@@ -20,11 +20,8 @@ export default class Statistics extends React.Component {
     }
     return (
       <div className="statistics">
-        <button onClick={this.props.navigate("mainmenu")}>
-          Return to menu
-        </button>
         <div style={{
-          marginTop: "20px",
+          marginBottom: "20px",
           textAlign: "center",
         }}>
           <div>
@@ -44,6 +41,9 @@ export default class Statistics extends React.Component {
           </div>
           { highestScoringWordsDom }
         </div>
+        <button onClick={this.props.navigate("mainmenu")}>
+          Return to menu
+        </button>
       </div>
     );
   }
