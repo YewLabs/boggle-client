@@ -181,7 +181,7 @@ class Main extends React.Component {
       this.handleWsOpen();
     };
     this.ws.onmessage = (e) => {
-      console.log("received " + e.data);
+      // console.log("received " + e.data);
       const data = JSON.parse(e.data);
       this.handleWsMessage(data);
     };
@@ -192,7 +192,7 @@ class Main extends React.Component {
   };
   wsSend = (msg) => {
     const data = JSON.stringify(msg);
-    console.log("sending " + data);
+    // console.log("sending " + data);
     this.ws.send(data);
   };
   handleWsOpen = () => {};
@@ -253,7 +253,7 @@ class Main extends React.Component {
   checkNumGames = (msg) => {
     const numGamesServer = msg["numGames"];
     if (numGamesServer < this.numGames) {
-      console.log("numGames check failed");
+      // console.log("numGames check failed");
       return false;
     }
     this.numGames = numGamesServer;
