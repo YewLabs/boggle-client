@@ -123,16 +123,16 @@ export const trophyDescriptions = [
     "Get 50% points in level 2",
   ],
   [
-    "Get 25% words in level 4",
-    "Get 25% points in level 4",
-    "Get 45% words in level 4",
-    "Get 45% points in level 4",
+    "Get 25% words in level 3",
+    "Get 25% points in level 3",
+    "Get 45% words in level 3",
+    "Get 45% points in level 3",
   ],
   [
-    "Get 20% words in level 3",
-    "Get 20% points in level 3",
-    "Get 35% words in level 3",
-    "Get 35% points in level 3",
+    "Get 20% words in level 4",
+    "Get 20% points in level 4",
+    "Get 35% words in level 4",
+    "Get 35% points in level 4",
   ],
 ];
 
