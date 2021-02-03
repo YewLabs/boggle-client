@@ -21,9 +21,7 @@ const SERVER_TEST = false;
 const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
 const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? null
-  : FAKE_SERVER_MODE
-  ? "ws://krawthekrow.me:29782/ws/puzzle/boggle"
-  : `${WEBSOCKETS_PROTOCOL}://${window.location.host}/ws/puzzle/boggle`;
+  : "wss://mh2021.krawthekrow.me/boggle"
 
 const TICK_INTERVAL = 100; // in ms, make larger if performance suffers
 
@@ -139,6 +137,14 @@ class Main extends React.Component {
   componentDidMount() {
     this.initWs();
   }
+  handleBadAuth = () => {
+    let team = null;
+
+    while (team == null) {
+      team = prompt('Enter team name (max 256 chars). Make sure this is the same for everyone in your team! You can change this later in the URL.');
+    }
+    window.location.href = `${window.location.pathname}?token=${encodeURIComponent(team)}`;
+  }
   initWs = () => {
     if (OFFLINE_MODE) {
       this.setState(
@@ -158,18 +164,23 @@ class Main extends React.Component {
     }
     this.ws = new WebSocket(WEBSOCKETS_ENDPOINT);
     this.ws.onopen = (e) => {
-      // Note: this path should no longer be used
-      if (!("token" in window)) {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (!urlParams.has("token")) {
-          window.location.href = "../";
-        }
-        window.token = urlParams.get("token");
-      }
+			const urlParams = new URLSearchParams(window.location.search);
+			if (!urlParams.has('token')) {
+				this.handleBadAuth();
+			}
+			let token = '';
+			try {
+				token = decodeURIComponent(urlParams.get('token'));
+			} catch (e) {
+				this.handleBadAuth();
+			}
+			if (token == '') {
+				this.handleBadAuth();
+			}
 
       this.wsSend({
         type: "AUTH",
-        data: window.token,
+        data: token,
       });
 
       this.requestGetUpdate();
