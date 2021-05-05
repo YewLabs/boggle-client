@@ -21,7 +21,7 @@ const SERVER_TEST = false;
 const WEBSOCKETS_PROTOCOL = location.protocol === "https:" ? "wss" : "ws";
 const WEBSOCKETS_ENDPOINT = OFFLINE_MODE
   ? null
-  : "wss://mh2021.krawthekrow.me/boggle"
+  : "wss://interactive.perpendicular.institute/boggle"
 
 const TICK_INTERVAL = 100; // in ms, make larger if performance suffers
 
